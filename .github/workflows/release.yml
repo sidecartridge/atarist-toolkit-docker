@@ -3,6 +3,8 @@ name: Release
 on:
   workflow_run:
     workflows: [Publish]
+    push:
+      tags: v*
     types: 
       - completed
 
