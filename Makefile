@@ -27,7 +27,7 @@ DOCKER_PASSWORD = ${DOCKERHUB_PASSWORD}
 
 ## Run ci part
 .PHONY: all
-all: clean version build publish
+all: clean build publish
 
 # Create the install files ready for release
 .PHONY: release
