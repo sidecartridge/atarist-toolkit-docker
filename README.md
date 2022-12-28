@@ -35,10 +35,11 @@ In order to run a container image, a user will need to have the following:
 
 ## How to install the docker image
 
+### Installation scripts
 The installation process will start executing the following script:
 
 ```
-HERE
+curl -s https://raw.githubusercontent.com/diegoparrilla/atarist-toolkit-docker/master/install.sh | bash
 ```
 
 The script will perform two actions:
