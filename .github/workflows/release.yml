@@ -7,17 +7,17 @@ on:
 
 jobs:
   release:
-    name: Publish for ${{ matrix.os }}
+    name: Release for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         include:
           - os: ubuntu-latest
             artifact_name: linux.sh
-            asset_name: install/linux.sh
+            asset_name: linux.sh
           - os: macos-latest
             artifact_name: macos.sh
-            asset_name: install/macos.sh
+            asset_name: macos.sh
 
     steps:
     - uses: actions/checkout@v2
