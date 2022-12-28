@@ -70,5 +70,7 @@ publish: build tag-images
 ## Tag this version
 .PHONY: tag
 tag:
+	-git tag -dlatest && git push origin --delete latest
+	git tag latest && git push origin latest && \
 	git tag v$(VERSION) && git push origin v$(VERSION) && \
 	echo "Tagged: $(VERSION)"
