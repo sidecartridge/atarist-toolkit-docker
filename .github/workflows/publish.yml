@@ -22,3 +22,29 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
         repository: logronoide/atarist-toolkit-docker
         readme: "./README.md"
+  release:
+    name: Release for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    needs: [build]
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: linux.sh
+            asset_name: linux.sh
+          - os: macos-latest
+            artifact_name: macos.sh
+            asset_name: macos.sh
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run build and publish
+      run: make release
+    - name: Upload shell scripts to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: target/release/${{ matrix.artifact_name }}
+        asset_name: ${{ matrix.asset_name }}
+        tag: ${{ github.ref }}
+        overwrite: true
