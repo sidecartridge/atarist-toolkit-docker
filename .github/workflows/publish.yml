@@ -20,5 +20,5 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
-        repository: diegoparrilla/atarist-toolkit-docker
+        repository: logronoide/atarist-toolkit-docker
         readme: "./README.md"
