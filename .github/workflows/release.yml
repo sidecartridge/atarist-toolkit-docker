@@ -1,9 +1,11 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - 'T*'
+  workflow_run:
+    workflows: ["Publish"]
+    branches: [main]
+    types: 
+      - completed
 
 jobs:
   release:
