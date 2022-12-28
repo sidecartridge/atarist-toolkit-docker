@@ -6,8 +6,8 @@ EXE = test.tos
 
 # VASM PARAMETERS
 VASMFLAGS=-Faout -quiet -x -m68000 -spaces -showopt
-VASM = ../../st vasm
-VLINK = ../../st vlink
+VASM = stcmd vasm
+VLINK = stcmd vlink
 
 # LIBCMINI PARAMETERS
 # IMPORTANT! There is functional verson of the LIBCMINI library in the docker image
@@ -17,7 +17,7 @@ VLINK = ../../st vlink
 LIBCMINI = /freemint/libcmini
 
 # GCC PARAMETERS
-CC = ../../st gcc
+CC = stcmd gcc
 CFLAGS=-c -std=gnu99 -I$(LIBCMINI)/include -g
 
 # LINKER PARAMETERS

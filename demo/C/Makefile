@@ -1,5 +1,5 @@
 IDIR = include
-CC = ../../st gcc
+CC = stcmd gcc
 CFLAGS = -I$(IDIR)
 
 ODIR = obj

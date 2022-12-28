@@ -1,7 +1,7 @@
 OUT = build/hello.tos
 VASM_FLAGS = -Felf
-VASM = ../../st vasm
-VLINK = ../../st vlink
+VASM = stcmd vasm
+VLINK = stcmd vlink
 ODIR = obj
 SDIR = src
 
