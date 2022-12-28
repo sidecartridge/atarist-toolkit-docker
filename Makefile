@@ -38,6 +38,9 @@ release:
 	sed 's/*/\\$$/g' install/linux.sh.tmp > install/linux.sh
 	rm install/macos.sh.tmp
 	rm install/linux.sh.tmp
+	mkdir -p target/release/
+	cp install/macos.sh target/release/
+	cp install/linux.sh target/release/
 
 ## Clean docker image
 .PHONY: clean
