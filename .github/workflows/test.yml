@@ -1,0 +1,13 @@
+name: Test
+
+# Trigger when a pull request is received
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run - build
+      run: make build

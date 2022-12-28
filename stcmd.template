@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+version=VERSION_TO_CHANGE
+
+if [ -z "$ST_WORKING_FOLDER" ]
+then
+      echo "\$ST_WORKING_FOLDER is empty. It should have the absolute path to the source code working folder."
+      exit 1
+fi
+
+docker run -it --rm \
+    -v $ST_WORKING_FOLDER:'/tmp' \
+    DOCKER_ACCOUNT/atarist-toolkit-docker:${version} $@
