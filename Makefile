@@ -9,6 +9,9 @@ PROJECT := atarist-toolkit-docker
 # Version from file
 VERSION := $(shell cat version.txt)
 
+# STCMD command from file
+STCMD_COMMAND := $(shell cat stcmd.template)
+
 # The docker tag name
 DOCKER_TAG_NAME = latest
 
@@ -24,14 +27,17 @@ DOCKER_PASSWORD = ${DOCKERHUB_PASSWORD}
 
 ## Run ci part
 .PHONY: all
-all: clean build publish
+all: clean version build publish
 
-# Change version in the st file
-.PHONY: version
-version:
-	sed "s#VERSION_TO_CHANGE#$(VERSION)#g" stcmd.template > stcmd.tmp
-	sed "s#DOCKER_ACCOUNT#$(DOCKER_ACCOUNT)#g" stcmd.tmp > stcmd
-	rm stcmd.tmp
+# Create the install files ready for release
+.PHONY: release
+release:
+	sed "s&STCMD_COMMAND&$(STCMD_COMMAND)&g" install/macos.sh.template > install/macos.sh.tmp
+	sed 's/*/\\$$/g' install/macos.sh.tmp > install/macos.sh
+	sed "s&STCMD_COMMAND&$(STCMD_COMMAND)&g" install/linux.sh.template > install/linux.sh.tmp
+	sed 's/*/\\$$/g' install/linux.sh.tmp > install/linux.sh
+	rm install/macos.sh.tmp
+	rm install/linux.sh.tmp
 
 ## Clean docker image
 .PHONY: clean

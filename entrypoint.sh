@@ -29,7 +29,7 @@ case $COMMAND in
     echo "- vasm: compiles M68K code into Atari ST TOS and GEM"
     echo "- vlink: link object files into Atari ST executables"
     echo ""
-    echo "Don't forget to set up the WORKING_FOLDER environment variable pointing to the"
+    echo "Don't forget to set up the ST_WORKING_FOLDER environment variable pointing to the"
     echo "absolute path of your working folder."
     ;;
 esac

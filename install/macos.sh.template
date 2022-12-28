@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [ -x "$(command -v docker)" ]; then
+    echo "Docker is installed..."
+else
+    echo "Docker not installed. Please install Docker first and then run this script again."
+    exit 1
+fi
+
+VERSION=$1
+if [ $# -eq 0 ]
+  then
+    echo "No version supplied. Using latest version."
+    VERSION="latest"
+fi
+
+echo "Pulling image logronoide/atarist-toolkit-docker:$VERSION..."
+docker pull logronoide/atarist-toolkit-docker:$VERSION
+
+echo "Installing the command stcmd in /usr/local/bin. Please enter your root password if prompted..."
+cat <<EOF > /usr/local/bin/stcmd
+STCMD_COMMAND
+EOF
+
+chmod +x /usr/local/bin/stcmd

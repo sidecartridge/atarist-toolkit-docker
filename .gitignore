@@ -137,4 +137,6 @@ obj/
 lib/
 out/
 stcmd
-
+install/linux.sh
+install/macos.sh
+install/windows.bat

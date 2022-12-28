@@ -45,7 +45,7 @@ The script will perform two actions:
 
 1. Download the latest version of the Atari ST development toolkit docker image the Docker Hub and install it in the available list of images in your Docker runtime.
 
-2. Install the script `st` in the PATH of your machine. To access the commands of the image the developer will only need to invoke the `st`.
+2. Install the script `stcmd` in the PATH of your machine. To access the commands of the image the developer will only need to invoke the `stcmd`.
 
 ## How verify that the image is properly configured
 
