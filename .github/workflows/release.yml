@@ -2,8 +2,7 @@ name: Release
 
 on:
   workflow_run:
-    workflows: ["Publish"]
-    branches: [main]
+    workflows: [Publish]
     types: 
       - completed
 
