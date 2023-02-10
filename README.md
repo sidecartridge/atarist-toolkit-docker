@@ -214,6 +214,7 @@ $ stcmd vlink hello.o -bataritos -o hello.tos
 
 ### The demo folder
 
+## The demo folder
 In the demo folder of the github repository you can find some examples of Atari ST development with the Atari ST development toolkit docker image. To run the examples, you need to clone the repository first:
 
 ```
@@ -226,6 +227,10 @@ Navigate to the different projects inside the `demo` folder and execute `make` t
 $ export ST_WORKING_FOLDER=/home/user/atarist-toolkit-docker/demo/SUBPROJECT
 $ make
 ```
+
+## "The Silly Demo" 
+
+*The Silly Demo* is a sample demo created with the Atari ST development toolkit docker image. You can learn more about it in the [The Silly Demo](https://github.com/diegoparrilla/atarist-silly-demo) repository.
 
 ## References
 
