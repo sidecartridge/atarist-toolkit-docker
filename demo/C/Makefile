@@ -1,5 +1,5 @@
 IDIR = include
-CC = stcmd gcc
+CC = m68k-atari-mint-gcc
 CFLAGS = -I$(IDIR)
 
 ODIR = obj
