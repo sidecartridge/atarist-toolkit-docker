@@ -5,7 +5,7 @@ FROM ubuntu:20.04 AS base_os
 WORKDIR /tmp
 FROM base_os AS vasm
 RUN apt -y update
-RUN DEBIAN_FRONTEND=noninteractive apt -y install curl build-essential
+RUN DEBIAN_FRONTEND=noninteractive apt -y install git clang rsync curl build-essential python3 python-is-python3
 RUN echo "deb http://ppa.launchpad.net/vriviere/ppa/ubuntu focal main" > /etc/apt/sources.list.d/vriviere-ubuntu-ppa-focal.list
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B5690522
 RUN curl http://sun.hasenbraten.de/vasm/release/vasm.tar.gz --output vasm.tar.gz
@@ -40,21 +40,78 @@ RUN gunzip libcmini.tar.gz
 RUN tar -xf libcmini.tar -C libcmini
 RUN rm -fR libcmini.tar
 
-RUN apt -y purge curl build-essential
-RUN apt-get -y clean
-RUN apt-get -y autoremove --purge
-
-
 # ---- Dependencies ----
 FROM libcmini AS dependencies
 RUN apt -y update
-RUN apt-get -y autoremove --purge
 RUN DEBIAN_FRONTEND=noninteractive apt -y install cross-mint-essential
-RUN apt-get -y clean
-RUN apt-get -y autoremove --purge
+
+# ---- Build AGT tools ----
+FROM dependencies AS agt
+WORKDIR /
+RUN git clone https://bitbucket.org/logronoide/agtools.git
+#RUN git clone https://bitbucket.org/d_m_l/agtools.git
+RUN mkdir -p /agtools/bin/Linux/x86_64
+WORKDIR /agtools/bin/Linux/x86_64
+
+# Install rmac assembler
+RUN curl http://rmac.is-slick.com/static/rmac-2.1.8-lin64.tar.gz --output rmac.tar.gz
+RUN gunzip rmac.tar.gz
+RUN tar -xf rmac.tar
+RUN rm -fR rmac.tar
+RUN mv rmac rmac.folder
+RUN mv rmac.folder/rmac rmac
+RUN chmod +x rmac
+RUN rm -fR rmac.folder
+RUN ls -al rmac
+
+# Create 3rdparty/lzsa
+WORKDIR /
+RUN git clone https://github.com/emmanuel-marty/lzsa.git
+WORKDIR /lzsa
+RUN make
+RUN cp /lzsa/lzsa /agtools/bin/Linux/x86_64/lzsa
+RUN rm -fR /lzsa
+
+# Hostinfo.txt is the platform we are building for
+WORKDIR /agtools
+RUN echo "Linux/Linux/x86_64" > hostinfo.txt
+
+# The makedefs should point to the docker excutables
+#COPY ./agt/makedefs.stcmdgcc /agtools/makedefs.stcmdgcc
+#COPY ./agt/makerules.stcmdgcc /agtools/makerules.stcmdgcc
+#COPY ./agt/makedefs /agtools/makedefs
+COPY ./agt/config.sh /agtools/config.sh
+
+# Create agtcut
+WORKDIR /agtools/tools/agtcut
+RUN make
+
+# Create packwrap
+WORKDIR /agtools/tools/packwrap
+RUN make
+
+# Create packwrap
+WORKDIR /agtools/tools/pcs2agi
+RUN make
+
+# Create 3rdparty/zx0
+WORKDIR /agtools/tools/3rdparty/zx0
+RUN make
+
+# Create 3rdparty/lz77
+WORKDIR /agtools/tools/3rdparty/lz77
+RUN make
+
+# Delete folders not needed at runtime and with dubious license files
+RUN rm -fR /agtools/examples
+RUN rm -fR /agtools/demos
+RUN rm -fR /agtools/tutorials
+RUN rm -fR /agtools/bin/Darwin
+RUN rm -fR /agtools/bin/win
+RUN rm -fR /agtools/tools
 
 # ---- Configure entrypoint ----
-FROM dependencies AS entrypoint
+FROM agt AS entrypoint
 
 WORKDIR /root
 
@@ -62,6 +119,7 @@ COPY ./entrypoint.sh /
 
 # Set environment variables.
 ENV HOME /root
+ENV AGTROOT=/agtools
 
 # Define working directory.
 

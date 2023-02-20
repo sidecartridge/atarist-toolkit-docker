@@ -21,7 +21,12 @@ Whether you're an experienced Atari ST developer or new to the platform, this im
 
 - [`m68k-atari-mint-gcc`]() is a cross compiler to generate C code usable in an Atari ST platform. It allows you to write C code on a modern machine and produce object files that can be run on the Atari ST. It is based on the GNU Compiler Collection (GCC) and has been specifically tailored for use with the Atari ST.
 
+- [`[A]tari [G]ame [T]ools`](https://bitbucket.org/d_m_l/agtools/src/master/) are a set of tools and code for rapid prototyping of Atari STE games. This version embeds the necessary libraries to compile an AGT project.
+
+- [`Python`]() in case you want to write helper scripts to automate your development process.
+
 These tools are all included in the docker image and are ready to use out of the box, making it easy for you to get started writing code for the Atari ST. Hopefully, I will be expanding the range of tools and resources available to developers who use the image in the future. By adding more tools, a more comprehensive and complete development environment for developers who are interested in writing code for the Atari ST will come. 
+
 
 ## Prerequisites
 
@@ -106,16 +111,10 @@ Example: If you have a project in the folder `/home/user/my-st-megademo`, you ne
 $ export ST_WORKING_FOLDER=/home/user/my-st-megademo
 ```
 
-Now when you run the command `stcmd` you will see the following message:
+Now when you run the command `stcmd` you will have full access to an Atari ST development environment running inside the container.
 
+And please, please, please:
 ```
-$ stcmd
-
-Available commands are:
-- gcc: compiles C code into Atari ST TOS and GEM
-- vasm: compiles M68K code into Atari ST TOS and GEM
-- vlink: link object files into Atari ST executables
-
 Don't forget to set up the ST_WORKING_FOLDER environment variable pointing to the
 absolute path of your working folder.
 ```
@@ -143,7 +142,7 @@ And now run the following command to compile the C code into an Atari ST executa
 stcmd gcc hello.c -o hello.tos
 ```
 
-Now we have our first Atari ST executable in the working folder `/home/user/my-st-megademo`. To run it, we need to use an emulator or a real Atari ST machine. My testing platforms is [Hatari emulator](https://hatari.tuxfamily.org/), but there are more options.
+Now we have our first Atari ST executable in the working folder `/home/user/my-st-megademo`. To run it, we need to use an emulator or a real Atari ST machine. My testing platforms is [Hatari emulator](https://hatari.tuxfamily.org/), but there are more options. By default, gcc is a shortcut to the infamous `gcc-m68k-atari-mint`.
 
 
 ### Set up a new M68K assembler project
@@ -212,8 +211,6 @@ And now link the object file into an Atari ST executable:
 $ stcmd vlink hello.o -bataritos -o hello.tos
 ```
 
-### The demo folder
-
 ## The demo folder
 In the demo folder of the github repository you can find some examples of Atari ST development with the Atari ST development toolkit docker image. To run the examples, you need to clone the repository first:
 
@@ -231,6 +228,35 @@ $ make
 ## "The Silly Demo" 
 
 *The Silly Demo* is a sample demo created with the Atari ST development toolkit docker image. You can learn more about it in the [The Silly Demo](https://github.com/diegoparrilla/atarist-silly-demo) repository.
+
+
+## The [A]tari [G]ame [Tools] (AGT)
+
+If you want to create games for the Atari STe, you can use the [A]tari [G]ame [Tools] (AGT). The Atari ST development toolkit docker image includes the libraries for AGT to run. You can learn more about it in the [AGT](https://bitbucket.org/d_m_l/agtools/src/master/) or in this thread in the Atari forum: [AGT - Atari Game Tools](https://www.atari-forum.com/viewtopic.php?t=31558).
+
+### How to build one of the sample AGT projects
+
+If you want to build one of the sample AGT projects, you need to clone the AGT repository first. Since the AGT is not very Linux friendly and the Docker image is based on Linux, I have created a fork of the AGT repository that includes the changes needed to support Linux. You can clone the repository with the following command:
+
+```
+git clone git@bitbucket.org:logronoide/agtools.git
+```
+
+Hopefully the changes are really simple and they will be merged into the original repository soon.
+
+Now navigate to the `demo` folder of the AGT repository choose one of the sample projects and execute `make` to build. My favourite is the horizontal scrolling shooter game called `h-shmup`:
+
+```
+$ cd agtools/demo/h-shmup
+```
+
+All the projects need to setup the environment variable `AGTROOT` with the value of the absolute path of the AGT repository, but you don't need to do it because the Atari ST development toolkit docker image already does it for you. So, you can just execute `stcmd` to access to the environment of the container and run `make` to build the project. And of course, don't forget to set the `ST_WORKING_FOLDER` environment variable with the value of the absolute path of the demo folder:
+
+```
+$ ST_WORKING_FOLDER=$HOME/agtools/demo/h-shmup stcmd make
+```
+
+After a few minutes the project will create a `disk1` folder with the auto executable file and resources needed to run the game. 
 
 ## References
 
