@@ -5,7 +5,7 @@ FROM ubuntu:20.04 AS base_os
 WORKDIR /tmp
 FROM base_os AS vasm
 RUN apt -y update
-RUN DEBIAN_FRONTEND=noninteractive apt -y install git clang rsync curl build-essential python3 python-is-python3
+RUN DEBIAN_FRONTEND=noninteractive apt -y install git clang rsync curl build-essential python3 python-is-python3 upx-ucl
 RUN echo "deb http://ppa.launchpad.net/vriviere/ppa/ubuntu focal main" > /etc/apt/sources.list.d/vriviere-ubuntu-ppa-focal.list
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B5690522
 RUN curl http://sun.hasenbraten.de/vasm/release/vasm.tar.gz --output vasm.tar.gz
