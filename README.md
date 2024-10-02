@@ -67,14 +67,14 @@ Once the script is downloaded, the developer can execute it in the terminal of t
 
 **For Linux**
 ```
-$ chmod +x linux.sh
-$ ./linux.sh
+chmod +x linux.sh
+./linux.sh
 ```
 
 **For MacOS**
 ```
-$ chmod +x macos.sh
-$ ./macos.sh
+chmod +x macos.sh
+./macos.sh
 ```
 
 ### What the installation script does
@@ -90,7 +90,7 @@ The script will perform two actions:
 Open a terminal in your Operating System, and enter the following command:
 
 ```
-$ stcmd
+stcmd
 $ST_WORKING_FOLDER is empty. It should have the absolute path to the source code.
 ```
 
@@ -108,7 +108,7 @@ The Docker image guarantees that all the needed libraries and dependencies are i
 Example: If you have a project in the folder `/home/user/my-st-megademo`, you need to set the environment variable `$ST_WORKING_FOLDER` with the value `/home/user/my-st-megademo`:
 
 ```
-$ export ST_WORKING_FOLDER=/home/user/my-st-megademo
+export ST_WORKING_FOLDER=/home/user/my-st-megademo
 ```
 
 Now when you run the command `stcmd` you will have full access to an Atari ST development environment running inside the container.
@@ -196,7 +196,7 @@ MESSAGE:
 And now run the following command to compile the M68K code:
 
 ```
-$ stcmd vasm hello.s -o hello.o -Felf
+stcmd vasm hello.s -o hello.o -Felf
 vasm 1.9a (c) in 2002-2022 Volker Barthelmann
 vasm M68k/CPU32/ColdFire cpu backend 2.5f (c) 2002-2022 Frank Wille
 vasm motorola syntax module 3.16 (c) 2002-2022 Frank Wille
@@ -208,21 +208,21 @@ CODE(acrx2):	         184 bytes
 And now link the object file into an Atari ST executable:
 
 ```
-$ stcmd vlink hello.o -bataritos -o hello.tos
+stcmd vlink hello.o -bataritos -o hello.tos
 ```
 
 ## The demo folder
 In the demo folder of the github repository you can find some examples of Atari ST development with the Atari ST development toolkit docker image. To run the examples, you need to clone the repository first:
 
 ```
-$ git clone git@github.com:diegoparrilla/atarist-toolkit-docker.git
+git clone git@github.com:diegoparrilla/atarist-toolkit-docker.git
 ```
 
 Navigate to the different projects inside the `demo` folder and execute `make` to build. But, before you do that, you need to set the environment variable `$ST_WORKING_FOLDER` with the value of the absolute path of the demo folder:
 
 ```
-$ export ST_WORKING_FOLDER=/home/user/atarist-toolkit-docker/demo/SUBPROJECT
-$ make
+export ST_WORKING_FOLDER=/home/user/atarist-toolkit-docker/demo/SUBPROJECT
+make
 ```
 
 ## "The Silly Demo" 
@@ -247,13 +247,13 @@ Hopefully the changes are really simple and they will be merged into the origina
 Now navigate to the `demo` folder of the AGT repository choose one of the sample projects and execute `make` to build. My favourite is the horizontal scrolling shooter game called `h-shmup`:
 
 ```
-$ cd agtools/demo/h-shmup
+cd agtools/demo/h-shmup
 ```
 
 All the projects need to setup the environment variable `AGTROOT` with the value of the absolute path of the AGT repository, but you don't need to do it because the Atari ST development toolkit docker image already does it for you. So, you can just execute `stcmd` to access to the environment of the container and run `make` to build the project. And of course, don't forget to set the `ST_WORKING_FOLDER` environment variable with the value of the absolute path of the demo folder:
 
 ```
-$ ST_WORKING_FOLDER=$HOME/agtools/demo/h-shmup stcmd make
+ST_WORKING_FOLDER=$HOME/agtools/demo/h-shmup stcmd make
 ```
 
 After a few minutes the project will create a `disk1` folder with the auto executable file and resources needed to run the game. 

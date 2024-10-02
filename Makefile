@@ -3,8 +3,11 @@ SHELL:=/bin/bash
 # Current date
 CURRENT_DATE = $(shell date -u +"%Y-%m-%d")
 
+# Machine arch
+ARCH = $(shell arch)
+
 # Project name
-PROJECT := atarist-toolkit-docker
+PROJECT := atarist-toolkit-docker-$(ARCH)
 
 # Version from file
 VERSION := $(shell cat version.txt)
