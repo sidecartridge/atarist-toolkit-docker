@@ -8,14 +8,16 @@ else
 fi
 
 VERSION=$1
+ARCH=`arch`
 if [ $# -eq 0 ]
   then
     echo "No version supplied. Using latest version."
     VERSION="latest"
 fi
 
-echo "Pulling image logronoide/atarist-toolkit-docker:$VERSION..."
-docker pull logronoide/atarist-toolkit-docker:$VERSION
+THEDOCKER="logronoide/atarist-toolkit-docker-${ARCH}:${VERSION}"
+echo "Pulling image ${THEDOCKER}..."
+docker pull ${THEDOCKER}
 
 echo "Installing the command stcmd in /usr/local/bin. Please enter your root password if prompted..."
 cat <<EOF > /usr/local/bin/stcmd
