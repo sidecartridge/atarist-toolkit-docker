@@ -50,7 +50,6 @@ curl -sL https://github.com/diegoparrilla/atarist-toolkit-docker/releases/downlo
 or as sudo
 ```
 sudo bash -c "$(curl -sL https://github.com/diegoparrilla/atarist-toolkit-docker/releases/download/latest/install_atarist_toolit_docker.sh)"
-
 ```
 **For Windows**
 ```
@@ -136,7 +135,7 @@ cd /home/user/my-st-megademo
 export ST_WORKING_FOLDER=`pwd`
 ```
 
-Now when you run the command `stcmd` you will have full access to an Atari ST development environment running inside the container.
+Now when you run the command `stcmd` you will have full access to an Atari ST development environment running inside the container. **stcmd** passes your user and group id down to the docker container. This should ensure files created by the docker will be owned by you after the container exits.
 
 And please, please, please:
 ```
@@ -257,9 +256,9 @@ Currently we have ASM, C, C\_ASM and C\_LIBCMINI demos.
 pushd demo/ASM
 export ST_WORKING_FOLDER=`pwd`
 stcmd make
+```
 
-
-
+```
 vasm src/hello.s -o obj/hello.o -Felf
 vasm 1.9f (c) in 2002-2023 Volker Barthelmann
 vasm M68k/CPU32/ColdFire cpu backend 2.6c (c) 2002-2023 Frank Wille
@@ -272,13 +271,13 @@ vlink obj/hello.o -bataritos -o build/hello.tos
 Resulting in:
 ```
 file build/hello.tos
+```
 
-
-
+```
 build/hello.tos: Atari ST M68K contiguous executable (txt=184, dat=0, bss=0, sym=84)
+```
 
-
-
+```
 popd
 
 ```
@@ -288,21 +287,23 @@ popd
 pushd demo/C
 export ST_WORKING_FOLDER=`pwd`
 stcmd make
+```
 
 
-
-
+```
 rm -f obj/* *~ core /*~ 
 m68k-atari-mint-gcc src/hello_bb.c -o obj/hello_bb.tos -Iinclude
 m68k-atari-mint-gcc src/hello_ge.c -o obj/hello_ge.prg -Iinclude -lgem
 ```
 resulting in
-````
+```
 file obj/hello_bb.tos 
+```
+```
 obj/hello_bb.tos: Atari ST M68K contiguous executable (txt=111148, dat=1588, bss=4052, sym=17795)
+```
 
-
-
+```
 popd
 ```
 
@@ -311,9 +312,9 @@ popd
 pushd demo/C_ASM/
 export ST_WORKING_FOLDER=`pwd`
 stcmd make
+```
 
-
-
+```
 Makefile:65: warning: overriding recipe for target 'clean'
 Makefile:56: warning: ignoring old recipe for target 'clean'
 rm -rf ./build
@@ -349,12 +350,15 @@ mkdir -p ./dist
 cp ./build/test.tos ./dist 	
 ```
 resulting in
-````
+```
 file dist/test.tos 
+```
+```
 dist/test.tos: Atari ST M68K contiguous executable (txt=12252, dat=156, bss=32, sym=0)
+```
 
 
-
+```
 popd
 
 ```
@@ -364,9 +368,10 @@ popd
 pushd demo/C_LIBCMINI
 export ST_WORKING_FOLDER=`pwd`
 stcmd make
+```
 
 
-
+```
 rm -rf out/*.tos
 mkdir -p out
 m68k-atari-mint-gcc -std=gnu99 -I/freemint/libcmini/include -nostdlib /freemint/libcmini/lib/crt0.o  src/main.c -o out/main.tos -s -L/freemint/libcmini/lib -lcmini -lgcc
@@ -374,10 +379,12 @@ m68k-atari-mint-gcc -std=gnu99 -I/freemint/libcmini/include -nostdlib /freemint/
 resulting in
 ```
 file out/main.tos 
+```
+```
 out/main.tos: Atari ST M68K contiguous executable (txt=11232, dat=164, bss=72, sym=0)
+```
 
-
-
+```
 popd
 ```
 
