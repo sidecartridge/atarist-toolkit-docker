@@ -10,5 +10,6 @@ then\n
 fi\n
 ARCH=`arch`\n
 THEDOCKER="logronoide/atarist-toolkit-docker-*{ARCH}:*{VERSION}"\n
-
-docker run -it --rm  -v *ST_WORKING_FOLDER:'/tmp' *THEDOCKER *@\n
+THEUSER=`id -u`\n
+THEGROUP=`id -g`\n
+docker run -it --rm  -v *ST_WORKING_FOLDER:'/tmp' --user "*{THEUSER}:*{THEGROUP}" *THEDOCKER *@\n
