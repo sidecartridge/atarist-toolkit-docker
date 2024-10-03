@@ -279,7 +279,6 @@ build/hello.tos: Atari ST M68K contiguous executable (txt=184, dat=0, bss=0, sym
 
 ```
 popd
-
 ```
 ### C
 
@@ -360,7 +359,6 @@ dist/test.tos: Atari ST M68K contiguous executable (txt=12252, dat=156, bss=32, 
 
 ```
 popd
-
 ```
 
 ### C\_LIBCMINI
