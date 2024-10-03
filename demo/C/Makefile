@@ -16,9 +16,11 @@ _OBJS = hello_bb.tos hello_ge.prg
 OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
 
 $(ODIR)/%_bb.tos: $(SDIR)/%_bb.c $(DEPS)
+	@mkdir -p $(@D)
 	$(CC) $^ -o $@ $(CFLAGS)
 
 $(ODIR)/%_ge.prg: $(SDIR)/%_ge.c $(DEPS)
+	@mkdir -p $(@D)
 	$(CC) $^ -o $@ $(CFLAGS) $(GEMLIBS)
 
 .PHONY: all
