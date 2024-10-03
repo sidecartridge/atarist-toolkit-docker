@@ -63,7 +63,7 @@ The developer can download manually the installation scripts from:
 
 Once the script is downloaded, the developer can execute it in the terminal of the Operating System.
 
-**For Linux**
+**For Linux, MacOS, RPi**
 ```
 chmod +x install_atarist_toolkit_docker.sh
 ./install_atarist_toolkit_docker.sh
@@ -88,7 +88,7 @@ $ST_WORKING_FOLDER is empty. It should have the absolute path to the source code
 
 If you see the message above, congratulations! You have successfully installed the Atari ST development toolkit docker image. The message means that the environment variable with the working folder of your project is missing. We will explain in the next chapter how to configure it.
 
-### Building my own docker image
+### Building your own docker image
 
 You will need a docker environment, space and a decent processor.
 
@@ -241,6 +241,118 @@ Navigate to the different projects inside the `demo` folder and execute `make` t
 ```
 export ST_WORKING_FOLDER=/home/user/atarist-toolkit-docker/demo/SUBPROJECT
 stcmd make
+```
+
+Currently we have ASM, C, C\_ASM and C\_LIBCMINI demos.
+
+### ASM
+```
+**pushd demo/ASM**
+**export ST_WORKING_FOLDER=`pwd`**
+**stcmd make**
+
+vasm src/hello.s -o obj/hello.o -Felf
+vasm 1.9f (c) in 2002-2023 Volker Barthelmann
+vasm M68k/CPU32/ColdFire cpu backend 2.6c (c) 2002-2023 Frank Wille
+vasm motorola syntax module 3.18 (c) 2002-2023 Frank Wille
+vasm ELF output module 2.7a (c) 2002-2016,2020,2022 Frank Wille
+
+CODE(acrx2):	         184 bytes
+vlink obj/hello.o -bataritos -o build/hello.tos
+
+ls
+
+ls -R
+.:
+build  Makefile  obj  src
+
+./build:
+hello.tos
+
+./obj:
+hello.o
+
+./src:
+hello.s
+
+file build/hello.tos
+
+build/hello.tos: Atari ST M68K contiguous executable (txt=184, dat=0, bss=0, sym=84)
+
+popd
+
+```
+### C
+
+```
+pushd demo/C
+export ST_WORKING_FOLDER=`pwd`
+stcmd make
+rm -f obj/* *~ core /*~ 
+m68k-atari-mint-gcc src/hello_bb.c -o obj/hello_bb.tos -Iinclude
+m68k-atari-mint-gcc src/hello_ge.c -o obj/hello_ge.prg -Iinclude -lgem
+ls obj
+hello_bb.tos  hello_ge.prg
+file obj/hello_bb.tos 
+obj/hello_bb.tos: Atari ST M68K contiguous executable (txt=111148, dat=1588, bss=4052, sym=17795)
+
+popd
+```
+
+### C\_ASM
+```
+pushd demo/C_ASM/
+export ST_WORKING_FOLDER=`pwd`
+stcmd make
+Makefile:65: warning: overriding recipe for target 'clean'
+Makefile:56: warning: ignoring old recipe for target 'clean'
+rm -rf ./build
+rm -rf ./dist
+mkdir -p ./build
+m68k-atari-mint-gcc -c -std=gnu99 -I/freemint/libcmini/include -g ./src/main.c -o ./build/main.o
+vasm -Faout -quiet -x -m68000 -spaces -showopt ./src/asm_functions.s -o ./build/asm_functions.o
+
+message 2050 in line 21 of "./src/asm_functions.s": operand optimized: label->(d16,PC)
+>	PEA			MSG_PREFIX		; Stack : 4 bytes (PEA = PUSH EFFECTIVE ADDRESS)
+
+message 2054 in line 22 of "./src/asm_functions.s": branch optimized into: b<cc>.b
+>	BSR			print_string        
+
+message 2050 in line 24 of "./src/asm_functions.s": operand optimized: label->(d16,PC)
+>	PEA			MESSAGE			; Stack : 4 bytes 
+
+message 2054 in line 25 of "./src/asm_functions.s": branch optimized into: b<cc>.b
+>	BSR			print_string
+
+message 2050 in line 35 of "./src/asm_functions.s": operand optimized: label->(d16,PC)
+>	PEA		MSG_PREFIX				; Stack : 4 bytes 
+
+message 2054 in line 36 of "./src/asm_functions.s": branch optimized into: b<cc>.b
+>	BSR		print_string            
+m68k-atari-mint-gcc -c -std=gnu99 -I/freemint/libcmini/include -g ./src/fx_screen.c -o ./build/fx_screen.o
+m68k-atari-mint-gcc /freemint/libcmini/lib/crt0.o \
+      ./build/asm_functions.o \
+	  ./build/fx_screen.o \
+	  ./build/main.o \
+	  -o ./build/test.tos -nostdlib -s -L/freemint/libcmini/lib -lcmini -lgcc -Wl,--traditional-format;
+mkdir -p ./dist
+cp ./build/test.tos ./dist 	
+file dist/test.tos 
+dist/test.tos: Atari ST M68K contiguous executable (txt=12252, dat=156, bss=32, sym=0)
+popd
+
+```
+
+### C\_LIBCMINI
+```
+pushd demo/C_LIBCMINI
+export ST_WORKING_FOLDER=`pwd`
+stcmd make
+rm -rf out/*.tos
+mkdir -p out
+m68k-atari-mint-gcc -std=gnu99 -I/freemint/libcmini/include -nostdlib /freemint/libcmini/lib/crt0.o  src/main.c -o out/main.tos -s -L/freemint/libcmini/lib -lcmini -lgcc
+file out/main.tos 
+out/main.tos: Atari ST M68K contiguous executable (txt=11232, dat=164, bss=72, sym=0)
 ```
 
 ## "The Silly Demo" 
