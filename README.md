@@ -47,6 +47,11 @@ The installation process will start executing the following script:
 ```
 curl -sL https://github.com/diegoparrilla/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh | bash
 ```
+or as sudo
+```
+sudo bash -c "$(curl -sL https://github.com/diegoparrilla/atarist-toolkit-docker/releases/download/latest/install_atarist_toolit_docker.sh)"
+
+```
 **For Windows**
 ```
 Use WSL Ubuntu and proceed with the normal linux download inside WSL shell..
