@@ -35,15 +35,11 @@ all: clean build publish
 # Create the install files ready for release
 .PHONY: release
 release:
-	sed "s&STCMD_COMMAND&$(STCMD_COMMAND)&g" install/macos.sh.template > install/macos.sh.tmp
-	sed 's/*/\\$$/g' install/macos.sh.tmp > install/macos.sh
 	sed "s&STCMD_COMMAND&$(STCMD_COMMAND)&g" install/linux.sh.template > install/linux.sh.tmp
-	sed 's/*/\\$$/g' install/linux.sh.tmp > install/linux.sh
-	rm install/macos.sh.tmp
+	sed 's/*/\\$$/g' install/linux.sh.tmp | sed 's/^[[:space:]]//' > install/install_atarist_toolkit_docker.sh
 	rm install/linux.sh.tmp
 	mkdir -p target/release/
-	cp install/macos.sh target/release/
-	cp install/linux.sh target/release/
+	cp install/install_atarist_toolkit_docker.sh target/release/
 
 ## Clean docker image
 .PHONY: clean

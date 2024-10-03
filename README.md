@@ -43,45 +43,32 @@ In order to run a container image, a user will need to have the following:
 ### Automated installation
 The installation process will start executing the following script:
 
-**For Linux**
+**For Linux, MacOS or RPi**
 ```
-curl -sL https://github.com/diegoparrilla/atarist-toolkit-docker/releases/download/latest/linux.sh | bash
+curl -sL https://github.com/diegoparrilla/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh | bash
 ```
-
-**For MacOS**
-```
-curl -sL https://github.com/diegoparrilla/atarist-toolkit-docker/releases/download/latest/macos.sh | bash
-```
-
 **For Windows**
 ```
-TO BE DONE
+Use WSL Ubuntu and proceed with the normal linux download inside WSL shell..
 ```
 
 ### Manual installation
 The developer can download manually the installation scripts from:
-- [linux.sh](https://github.com/diegoparrilla/atarist-toolkit-docker/releases/download/latest/linux.sh)
-- [macos.sh](https://github.com/diegoparrilla/atarist-toolkit-docker/releases/download/latest/macos.sh)
+- [install_atarist_toolkit.sh](https://github.com/diegoparrilla/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh)
 
 Once the script is downloaded, the developer can execute it in the terminal of the Operating System.
 
 **For Linux**
 ```
-chmod +x linux.sh
-./linux.sh
-```
-
-**For MacOS**
-```
-chmod +x macos.sh
-./macos.sh
+chmod +x install_atarist_toolkit_docker.sh
+./install_atarist_toolkit_docker.sh
 ```
 
 ### What the installation script does
 
 The script will perform two actions:
 
-1. Download the latest version of the Atari ST development toolkit docker image the Docker Hub and install it in the available list of images in your Docker runtime.
+1. Download the latest version of the Atari ST development toolkit docker image for your ARCH from the Docker Hub and install it in the available list of images in your Docker runtime.
 
 2. Install the script `stcmd` in the PATH of your machine. To access the commands of the image the developer will only need to invoke the `stcmd`.
 
@@ -96,6 +83,27 @@ $ST_WORKING_FOLDER is empty. It should have the absolute path to the source code
 
 If you see the message above, congratulations! You have successfully installed the Atari ST development toolkit docker image. The message means that the environment variable with the working folder of your project is missing. We will explain in the next chapter how to configure it.
 
+### Building my own docker image
+
+You will need a docker environment, space and a decent processor.
+
+```
+git clone git@github.com:diegoparrilla/atarist-toolkit-docker.git
+cd atarist-toolkit-docker
+make clean build release
+```
+
+And if successful you will find stcmd installation script in **target/release/install_atarist_toolkit_docker.sh** and a docker image, for example:
+```
+docker images
+REPOSITORY                                  TAG                IMAGE ID       CREATED       SIZE
+logronoide/atarist-toolkit-docker-aarch64   0.0.3              650b5a8d8b13   2 hours ago   942MB
+logronoide/atarist-toolkit-docker-aarch64   0.0.3-2024-10-03   650b5a8d8b13   2 hours ago   942MB
+logronoide/atarist-toolkit-docker-aarch64   latest             650b5a8d8b13   2 hours ago   942MB
+
+```
+
+Typical extensions are x86\_64 for Intel x86, arm64 for MacOS M1,2,3 and aarch64 for Raspberry Pi
 
 ## Start using the Atari ST development toolkit docker image
 
@@ -109,6 +117,11 @@ Example: If you have a project in the folder `/home/user/my-st-megademo`, you ne
 
 ```
 export ST_WORKING_FOLDER=/home/user/my-st-megademo
+```
+or
+```
+cd /home/user/my-st-megademo
+export ST_WORKING_FOLDER=`pwd`
 ```
 
 Now when you run the command `stcmd` you will have full access to an Atari ST development environment running inside the container.
@@ -222,7 +235,7 @@ Navigate to the different projects inside the `demo` folder and execute `make` t
 
 ```
 export ST_WORKING_FOLDER=/home/user/atarist-toolkit-docker/demo/SUBPROJECT
-make
+stcmd make
 ```
 
 ## "The Silly Demo" 
