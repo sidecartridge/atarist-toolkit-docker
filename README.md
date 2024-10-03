@@ -66,7 +66,7 @@ Once the script is downloaded, the developer can execute it in the terminal of t
 **For Linux, MacOS, RPi**
 ```
 chmod +x install_atarist_toolkit_docker.sh
-./install_atarist_toolkit_docker.sh
+sudo bash -c ./install_atarist_toolkit_docker.sh
 ```
 
 ### What the installation script does
@@ -105,7 +105,14 @@ REPOSITORY                                  TAG                IMAGE ID       CR
 logronoide/atarist-toolkit-docker-aarch64   0.0.3              650b5a8d8b13   2 hours ago   942MB
 logronoide/atarist-toolkit-docker-aarch64   0.0.3-2024-10-03   650b5a8d8b13   2 hours ago   942MB
 logronoide/atarist-toolkit-docker-aarch64   latest             650b5a8d8b13   2 hours ago   942MB
+...
+logronoide/atarist-toolkit-docker-x86_64    latest             7496991add79   6 minutes ago 1.07GB
 
+```
+
+so install this script
+```
+sudo bash -c target/release/install_atarist_toolkit_docker.sh
 ```
 
 Typical extensions are x86\_64 for Intel x86, arm64 for MacOS M1,2,3 and aarch64 for Raspberry Pi
@@ -247,9 +254,11 @@ Currently we have ASM, C, C\_ASM and C\_LIBCMINI demos.
 
 ### ASM
 ```
-**pushd demo/ASM**
-**export ST_WORKING_FOLDER=`pwd`**
-**stcmd make**
+pushd demo/ASM
+export ST_WORKING_FOLDER=`pwd`
+stcmd make
+
+
 
 vasm src/hello.s -o obj/hello.o -Felf
 vasm 1.9f (c) in 2002-2023 Volker Barthelmann
@@ -259,25 +268,16 @@ vasm ELF output module 2.7a (c) 2002-2016,2020,2022 Frank Wille
 
 CODE(acrx2):	         184 bytes
 vlink obj/hello.o -bataritos -o build/hello.tos
-
-ls
-
-ls -R
-.:
-build  Makefile  obj  src
-
-./build:
-hello.tos
-
-./obj:
-hello.o
-
-./src:
-hello.s
-
+```
+Resulting in:
+```
 file build/hello.tos
 
+
+
 build/hello.tos: Atari ST M68K contiguous executable (txt=184, dat=0, bss=0, sym=84)
+
+
 
 popd
 
@@ -288,13 +288,20 @@ popd
 pushd demo/C
 export ST_WORKING_FOLDER=`pwd`
 stcmd make
+
+
+
+
 rm -f obj/* *~ core /*~ 
 m68k-atari-mint-gcc src/hello_bb.c -o obj/hello_bb.tos -Iinclude
 m68k-atari-mint-gcc src/hello_ge.c -o obj/hello_ge.prg -Iinclude -lgem
-ls obj
-hello_bb.tos  hello_ge.prg
+```
+resulting in
+````
 file obj/hello_bb.tos 
 obj/hello_bb.tos: Atari ST M68K contiguous executable (txt=111148, dat=1588, bss=4052, sym=17795)
+
+
 
 popd
 ```
@@ -304,6 +311,9 @@ popd
 pushd demo/C_ASM/
 export ST_WORKING_FOLDER=`pwd`
 stcmd make
+
+
+
 Makefile:65: warning: overriding recipe for target 'clean'
 Makefile:56: warning: ignoring old recipe for target 'clean'
 rm -rf ./build
@@ -337,8 +347,14 @@ m68k-atari-mint-gcc /freemint/libcmini/lib/crt0.o \
 	  -o ./build/test.tos -nostdlib -s -L/freemint/libcmini/lib -lcmini -lgcc -Wl,--traditional-format;
 mkdir -p ./dist
 cp ./build/test.tos ./dist 	
+```
+resulting in
+````
 file dist/test.tos 
 dist/test.tos: Atari ST M68K contiguous executable (txt=12252, dat=156, bss=32, sym=0)
+
+
+
 popd
 
 ```
@@ -348,11 +364,21 @@ popd
 pushd demo/C_LIBCMINI
 export ST_WORKING_FOLDER=`pwd`
 stcmd make
+
+
+
 rm -rf out/*.tos
 mkdir -p out
 m68k-atari-mint-gcc -std=gnu99 -I/freemint/libcmini/include -nostdlib /freemint/libcmini/lib/crt0.o  src/main.c -o out/main.tos -s -L/freemint/libcmini/lib -lcmini -lgcc
+```
+resulting in
+```
 file out/main.tos 
 out/main.tos: Atari ST M68K contiguous executable (txt=11232, dat=164, bss=72, sym=0)
+
+
+
+popd
 ```
 
 ## "The Silly Demo" 
