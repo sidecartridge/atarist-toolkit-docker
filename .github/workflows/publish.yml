@@ -30,11 +30,8 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            artifact_name: linux.sh
-            asset_name: linux.sh
-          - os: macos-latest
-            artifact_name: macos.sh
-            asset_name: macos.sh
+            artifact_name: install_atarist_toolkit_docker.sh
+            asset_name: install_atarist_toolkit_docker.sh
 
     steps:
     - uses: actions/checkout@v2
@@ -47,12 +44,4 @@ jobs:
         file: target/release/${{ matrix.artifact_name }}
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
-        overwrite: true
-    - name: Upload shell scripts to release to latest
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: target/release/${{ matrix.artifact_name }}
-        asset_name: ${{ matrix.asset_name }}
-        tag: latest
         overwrite: true
