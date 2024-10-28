@@ -1,7 +1,7 @@
 # Atari ST development toolkit docker image
 A Docker image with the tools to develop Atari ST software in a modern environment.
 
-[![Test](https://github.com/diegoparrilla/atarist-toolkit-docker/workflows/Test/badge.svg)](https://github.com/diegoparrilla/atarist-toolkit-docker/actions?query=workflow%3ATest) [![Deploy](https://github.com/diegoparrilla/atarist-toolkit-docker/workflows/Publish/badge.svg)](https://github.com/diegoparrilla/atarist-toolkit-docker/actions?query=workflow%3APublish)
+[![Test](https://github.com/sidecartridge/atarist-toolkit-docker/workflows/Test/badge.svg)](https://github.com/sidecartridge/atarist-toolkit-docker/actions?query=workflow%3ATest) [![Deploy](https://github.com/sidecartridge/atarist-toolkit-docker/workflows/Publish/badge.svg)](https://github.com/sidecartridge/atarist-toolkit-docker/actions?query=workflow%3APublish)
 
 ## Introduction
 
@@ -45,11 +45,11 @@ The installation process will start executing the following script:
 
 **For Linux, MacOS or RPi**
 ```
-curl -sL https://github.com/diegoparrilla/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh | bash
+curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh | bash
 ```
 or as sudo
 ```
-sudo bash -c "$(curl -sL https://github.com/diegoparrilla/atarist-toolkit-docker/releases/download/latest/install_atarist_toolit_docker.sh)"
+sudo bash -c "$(curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolit_docker.sh)"
 ```
 **For Windows**
 ```
@@ -58,7 +58,7 @@ Use WSL Ubuntu and proceed with the normal linux download inside WSL shell..
 
 ### Manual installation
 The developer can download manually the installation scripts from:
-- [install_atarist_toolkit.sh](https://github.com/diegoparrilla/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh)
+- [install_atarist_toolkit.sh](https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh)
 
 Once the script is downloaded, the developer can execute it in the terminal of the Operating System.
 
@@ -92,7 +92,7 @@ If you see the message above, congratulations! You have successfully installed t
 You will need a docker environment, space and a decent processor.
 
 ```
-git clone git@github.com:diegoparrilla/atarist-toolkit-docker.git
+git clone git@github.com:sidecartridge/atarist-toolkit-docker.git
 cd atarist-toolkit-docker
 make clean build release
 ```
@@ -239,7 +239,7 @@ stcmd vlink hello.o -bataritos -o hello.tos
 In the demo folder of the github repository you can find some examples of Atari ST development with the Atari ST development toolkit docker image. To run the examples, you need to clone the repository first:
 
 ```
-git clone git@github.com:diegoparrilla/atarist-toolkit-docker.git
+git clone git@github.com:sidecartridge/atarist-toolkit-docker.git
 ```
 
 Navigate to the different projects inside the `demo` folder and execute `make` to build. But, before you do that, you need to set the environment variable `$ST_WORKING_FOLDER` with the value of the absolute path of the demo folder:
@@ -388,7 +388,7 @@ popd
 
 ## "The Silly Demo" 
 
-*The Silly Demo* is a sample demo created with the Atari ST development toolkit docker image. You can learn more about it in the [The Silly Demo](https://github.com/diegoparrilla/atarist-silly-demo) repository.
+*The Silly Demo* is a sample demo created with the Atari ST development toolkit docker image. You can learn more about it in the [The Silly Demo](https://github.com/sidecartridge/atarist-silly-demo) repository.
 
 
 ## The [A]tari [G]ame [Tools] (AGT)
@@ -422,7 +422,7 @@ After a few minutes the project will create a `disk1` folder with the auto execu
 ## References
 
 * [Atari ST development toolkit docker image](https://hub.docker.com/r/logronoide/atarist-toolkit-docker)
-* [Atari ST development toolkit docker image source code](https://github.com:diegoparrilla/atarist-toolkit-docker)
+* [Atari ST development toolkit docker image source code](https://github.com:sidecartridge/atarist-toolkit-docker)
 * [Atari ST samples of cross development (French)](https://www.fxjavadevblog.fr/m68k-atari-st-assembly-linux/)
 * [The Atari ST MC68000 Assembly Language Tutorials](https://nguillaumin.github.io/perihelion-m68k-tutorials/index.html)
 
