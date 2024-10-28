@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        arch: [x86_64]
     steps:
     - uses: actions/checkout@v2
     - name: Run build and publish
@@ -20,7 +23,7 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
-        repository: logronoide/atarist-toolkit-docker
+        repository: logronoide/atarist-toolkit-docker-${{ matrix.arch }}
         readme: "./README.md"
   release:
     name: Release for ${{ matrix.os }}
