@@ -14,6 +14,9 @@ if [ $# -eq 0 ]
     VERSION="latest"
 fi
 ARCH=`arch`
+if [ "${ARCH}" = "arm64" ]; then
+    ARCH="x86_64"
+fi
 
 THEDOCKER="logronoide/atarist-toolkit-docker-${ARCH}:${VERSION}"
 echo "Pulling image ${THEDOCKER}..."
@@ -32,10 +35,15 @@ then
       exit 1
 fi
 ARCH=`arch`
+THEPLATFORM=""
+if [ "\${ARCH}" = "arm64" ]; then
+    ARCH="x86_64"
+    THEPLATFORM="--platform linux/amd64"
+fi
 THEDOCKER="logronoide/atarist-toolkit-docker-\${ARCH}:\${VERSION}"
 THEUSER=\$(id -u)
 THEGROUP=\$(id -g)
-docker run -it --rm  -v \${ST_WORKING_FOLDER}:'/tmp' --user "\${THEUSER}:\${THEGROUP}" \${THEDOCKER} \$@
+docker run \${THEPLATFORM} -it --rm -v \${ST_WORKING_FOLDER}:'/tmp' --user "\${THEUSER}:\${THEGROUP}" \${THEDOCKER} \$@
 EOF
 
 chmod +x /usr/local/bin/stcmd
