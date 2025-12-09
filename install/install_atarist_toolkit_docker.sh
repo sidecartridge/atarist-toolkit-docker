@@ -29,10 +29,10 @@ if [ -z "\$VERSION" ]
 then
     VERSION="latest"
 fi
-if [ -z "\$ST_WORKING_FOLDER" ]
+if [ -z "\${ST_WORKING_FOLDER}" ]
 then
-      echo 'ST_WORKING_FOLDER is empty. It should have the absolute path to the source code working folder.'
-      exit 1
+    ST_WORKING_FOLDER=\`pwd\`
+    echo "ST_WORKING_FOLDER is empty, using \${ST_WORKING_FOLDER} as absolute path to the source code working folder."
 fi
 ARCH=`arch`
 THEPLATFORM=""
