@@ -3,11 +3,20 @@ SHELL:=/bin/bash
 # Current date
 CURRENT_DATE = $(shell date -u +"%Y-%m-%d")
 
-# Machine arch
-ARCH = $(shell arch)
+# Machine arch (set using export to build for different platform)
+ARCH ?= $(shell arch)
+
+# Docker platform: resolve differences between Mac and Linux arch responses
+ifeq ($(ARCH),i386) # Intel Mac
+	DOCKER_PLATFORM := x86_64
+else ifeq ($(ARCH),aarch64) # Linux ARM64
+	DOCKER_PLATFORM := arm64
+else
+	DOCKER_PLATFORM := $(ARCH)
+endif
 
 # Project name
-PROJECT := atarist-toolkit-docker-$(ARCH)
+PROJECT := atarist-toolkit-docker-$(DOCKER_PLATFORM)
 
 # Version from file
 VERSION := $(shell cat version.txt)
@@ -19,7 +28,7 @@ STCMD_COMMAND := $(shell cat stcmd.template)
 DOCKER_TAG_NAME = latest
 
 # Docker account
-DOCKER_ACCOUNT = logronoide
+DOCKER_ACCOUNT = neilrackett
 
 # Docker image name
 DOCKER_IMAGE_NAME = $(PROJECT)
@@ -49,7 +58,8 @@ clean:
 ## Build docker image
 .PHONY: build
 build:
-	docker build -f Dockerfile -t $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG_NAME) .
+	@echo "Building docker image $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG_NAME)..."
+	docker build --platform=linux/${DOCKER_PLATFORM} -f Dockerfile -t $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG_NAME) .
 
 ## Tag docker images
 .PHONY: tag-images

@@ -7,18 +7,21 @@ else
     exit 1
 fi
 
+DOCKER_ACCOUNT=neilrackett
 VERSION=$1
-if [ $# -eq 0 ]
-  then
+if [ $# -eq 0 ]; then
     echo "No version supplied. Using latest version."
     VERSION="latest"
 fi
 ARCH=`arch`
-if [ "${ARCH}" = "arm64" ]; then
+if [ "${ARCH}" = "i386" ]; then
     ARCH="x86_64"
 fi
+if [ "${ARCH}" = "aarch64" ]; then
+    ARCH="arm64"
+fi
 
-THEDOCKER="logronoide/atarist-toolkit-docker-${ARCH}:${VERSION}"
+THEDOCKER="${DOCKER_ACCOUNT}/atarist-toolkit-docker-${ARCH}:${VERSION}"
 echo "Pulling image ${THEDOCKER}..."
 docker pull ${THEDOCKER}
 
@@ -32,18 +35,13 @@ fi
 if [ -z "\${ST_WORKING_FOLDER}" ]
 then
     ST_WORKING_FOLDER=\`pwd\`
-    echo "ST_WORKING_FOLDER is empty, using \${ST_WORKING_FOLDER} as absolute path to the source code working folder."
+    echo "ST_WORKING_FOLDER is empty. Using \${ST_WORKING_FOLDER} as absolute path to the source code working folder."
 fi
-ARCH=`arch`
-THEPLATFORM=""
-if [ "\${ARCH}" = "arm64" ]; then
-    ARCH="x86_64"
-    THEPLATFORM="--platform linux/amd64"
-fi
-THEDOCKER="logronoide/atarist-toolkit-docker-\${ARCH}:\${VERSION}"
+ARCH="${ARCH}"
+THEDOCKER="${DOCKER_ACCOUNT}/atarist-toolkit-docker-\${ARCH}:\${VERSION}"
 THEUSER=\$(id -u)
 THEGROUP=\$(id -g)
-docker run \${THEPLATFORM} -it --rm -v \${ST_WORKING_FOLDER}:'/tmp' --user "\${THEUSER}:\${THEGROUP}" \${THEDOCKER} \$@
+docker run --platform linux/${ARCH} -it --rm -v \${ST_WORKING_FOLDER}:'/tmp' --user "\${THEUSER}:\${THEGROUP}" \${THEDOCKER} \$@
 EOF
 
 chmod +x /usr/local/bin/stcmd
