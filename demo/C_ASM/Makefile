@@ -52,9 +52,6 @@ main: main.o asm_functions.o fx_screen.o
 		  $(BUILD_DIR)/main.o \
 		  -o $(BUILD_DIR)/test.tos $(LINKFLAGS);
 
-clean:
-	rm -f $(ODIR)/* $(OUT)
-
 .PHONY: dist
 dist: main
 	mkdir -p $(DIST_DIR)
@@ -62,5 +59,6 @@ dist: main
 
 .PHONY: clean
 clean:
+	rm -f $(ODIR)/* $(OUT)
 	rm -rf $(BUILD_DIR)
 	rm -rf $(DIST_DIR)
