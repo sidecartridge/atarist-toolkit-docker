@@ -120,15 +120,19 @@ Typical extensions are x86\_64 for Intel x86, arm64 for MacOS M1,2,3 and aarch64
 
 ## Start using the Atari ST development toolkit docker image
 
-### Configure the working folder
+### Default working folder
 
-By default, when you run `stcmd`, the Atari ST development toolkit docker image will use the current folder as the working folder of your project.
+The Docker image guarantees that all the needed libraries and dependencies are in one place and managed by the container. The container has it's own file system, and the files that are created in the container are not accessible from the host machine, so the Atari ST development toolkit docker image creates a folder on the host machine and mounts it in the container. This folder will be the working folder of your project.
 
-Alternatively, you can tell the Atari ST development toolkit docker image where the source code of your project is located by setting the environment variable `ST_WORKING_FOLDER` to the absolute path of the folder where your source code is located. 
+When you run the command `stcmd` you will have full access to an Atari ST development environment running inside the container. `stcmd` passes your user and group id down to the docker container. This should ensure files created by the docker will be owned by you after the container exits.
 
-The Docker image guarantees that all the needed libraries and dependencies are in one place and managed by the container. The container has it's own file system, and the files that are created in the container are not accessible from the host machine, so the Atari ST development toolkit docker image creates a folder on the host machine and mounts it in the container. This folder will be the working folder of your project. At runtime, this is either the current folder or the folder set using the `ST_WORKING_FOLDER` environment variable.
+By default, the Atari ST development toolkit docker image automatically sets the current folder as the working folder of your project whenever you run `stcmd`.
 
-Example: If you have a project in the folder `/home/user/my-st-megademo`, you can to set the environment variable `ST_WORKING_FOLDER` to the value `/home/user/my-st-megademo` if you always want `stcmd` to use this folder as the working folder of your project. You can do this by running the following command:
+### Configuring a fixed working folder
+
+If you prefer, you can override the default behavior by setting the environment variable `ST_WORKING_FOLDER` to the absolute path of the folder where your source code is located. If this environment variable is set, the Atari ST development toolkit docker image will always use this folder as the working folder of your project, regardless of where you run the `stcmd` command from.
+
+Example: If you have a project in the folder `/home/user/my-st-megademo`, you can to set the environment variable `ST_WORKING_FOLDER` to the value `/home/user/my-st-megademo`:
 
 ```
 export ST_WORKING_FOLDER=/home/user/my-st-megademo
@@ -138,8 +142,6 @@ or
 cd /home/user/my-st-megademo
 export ST_WORKING_FOLDER=`pwd`
 ```
-
-Now when you run the command `stcmd` you will have full access to an Atari ST development environment running inside the container. **stcmd** passes your user and group id down to the docker container. This should ensure files created by the docker will be owned by you after the container exits.
 
 ### Set up a new C project
 
