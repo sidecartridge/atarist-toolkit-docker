@@ -82,10 +82,12 @@ Open a terminal in your Operating System, and enter the following command:
 
 ```
 stcmd
-$ST_WORKING_FOLDER is empty. It should have the absolute path to the source code.
+ST_WORKING_FOLDER is empty. Using \current\path as absolute path to the source code working folder.
 ```
 
-If you see the message above, congratulations! You have successfully installed the Atari ST development toolkit docker image. The message means that the environment variable with the working folder of your project is missing. We will explain in the next chapter how to configure it.
+If you see the message above, congratulations! You have successfully installed the Atari ST development toolkit docker image. The message means that the optional environment variable with the working folder of your project is missing. We will explain in the next chapter how to configure it.
+
+If you would like to suppress this warning message, you can set the environment variable `STCMD_QUIET` to `1` in your shell configuration file.
 
 ### Building your own docker image
 
@@ -120,11 +122,13 @@ Typical extensions are x86\_64 for Intel x86, arm64 for MacOS M1,2,3 and aarch64
 
 ### Configure the working folder
 
-The Atari ST development toolkit docker image needs to know where the source code of your project is located. To do this, you need to set the environment variable `$ST_WORKING_FOLDER` with the absolute path to the folder where your source code is located. 
+By default, when you run `stcmd`, the Atari ST development toolkit docker image will use the current folder as the working folder of your project.
 
-The Docker image guarantees that all the needed libraries and dependencies are in one place and managed by the container. Sadly, the container has it's own file system, and the files that are created in the container are not accessible from the host machine. To solve this problem, the Atari ST development toolkit docker image will create a folder in the host machine and mount it in the container. This folder will be the working folder of your project and it's in the `ST_WORKING_FOLDER` environment variable.
+Alternatively, you can tell the Atari ST development toolkit docker image where the source code of your project is located by setting the environment variable `ST_WORKING_FOLDER` to the absolute path of the folder where your source code is located. 
 
-Example: If you have a project in the folder `/home/user/my-st-megademo`, you need to set the environment variable `$ST_WORKING_FOLDER` with the value `/home/user/my-st-megademo`:
+The Docker image guarantees that all the needed libraries and dependencies are in one place and managed by the container. The container has it's own file system, and the files that are created in the container are not accessible from the host machine, so the Atari ST development toolkit docker image creates a folder on the host machine and mounts it in the container. This folder will be the working folder of your project. At runtime, this is either the current folder or the folder set using the `ST_WORKING_FOLDER` environment variable.
+
+Example: If you have a project in the folder `/home/user/my-st-megademo`, you can to set the environment variable `ST_WORKING_FOLDER` to the value `/home/user/my-st-megademo` if you always want `stcmd` to use this folder as the working folder of your project. You can do this by running the following command:
 
 ```
 export ST_WORKING_FOLDER=/home/user/my-st-megademo
@@ -136,12 +140,6 @@ export ST_WORKING_FOLDER=`pwd`
 ```
 
 Now when you run the command `stcmd` you will have full access to an Atari ST development environment running inside the container. **stcmd** passes your user and group id down to the docker container. This should ensure files created by the docker will be owned by you after the container exits.
-
-And please, please, please:
-```
-Don't forget to set up the ST_WORKING_FOLDER environment variable pointing to the
-absolute path of your working folder.
-```
 
 ### Set up a new C project
 
@@ -242,19 +240,13 @@ In the demo folder of the github repository you can find some examples of Atari 
 git clone git@github.com:sidecartridge/atarist-toolkit-docker.git
 ```
 
-Navigate to the different projects inside the `demo` folder and execute `make` to build. But, before you do that, you need to set the environment variable `$ST_WORKING_FOLDER` with the value of the absolute path of the demo folder:
-
-```
-export ST_WORKING_FOLDER=/home/user/atarist-toolkit-docker/demo/SUBPROJECT
-stcmd make
-```
+Navigate to the different projects inside the `demo` folder and execute `stcmd make` to build; if you have previously set `ST_WORKING_FOLDER`, run `unset ST_WORKING_FOLDER` ensure that `stcmd` uses the current directory.
 
 Currently we have ASM, C, C\_ASM and C\_LIBCMINI demos.
 
 ### ASM
 ```
 pushd demo/ASM
-export ST_WORKING_FOLDER=`pwd`
 stcmd make
 ```
 
@@ -284,7 +276,6 @@ popd
 
 ```
 pushd demo/C
-export ST_WORKING_FOLDER=`pwd`
 stcmd make
 ```
 
@@ -309,7 +300,6 @@ popd
 ### C\_ASM
 ```
 pushd demo/C_ASM/
-export ST_WORKING_FOLDER=`pwd`
 stcmd make
 ```
 
@@ -364,7 +354,6 @@ popd
 ### C\_LIBCMINI
 ```
 pushd demo/C_LIBCMINI
-export ST_WORKING_FOLDER=`pwd`
 stcmd make
 ```
 
@@ -411,10 +400,10 @@ Now navigate to the `demo` folder of the AGT repository choose one of the sample
 cd agtools/demo/h-shmup
 ```
 
-All the projects need to setup the environment variable `AGTROOT` with the value of the absolute path of the AGT repository, but you don't need to do it because the Atari ST development toolkit docker image already does it for you. So, you can just execute `stcmd` to access to the environment of the container and run `make` to build the project. And of course, don't forget to set the `ST_WORKING_FOLDER` environment variable with the value of the absolute path of the demo folder:
+All the projects need to setup the environment variable `AGTROOT` with the value of the absolute path of the AGT repository, but you don't need to do it because the Atari ST development toolkit docker image already does it for you. So, you can just execute `stcmd` to access to the environment of the container and run `make` to build the project:
 
 ```
-ST_WORKING_FOLDER=$HOME/agtools/demo/h-shmup stcmd make
+stcmd make
 ```
 
 After a few minutes the project will create a `disk1` folder with the auto executable file and resources needed to run the game. 
