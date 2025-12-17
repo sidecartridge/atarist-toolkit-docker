@@ -3,7 +3,7 @@ SHELL:=/bin/bash
 # Current date
 CURRENT_DATE = $(shell date -u +"%Y-%m-%d")
 
-# Machine arch (set using export to build for different platform)
+# Machine arch (override with: make ARCH=value or export ARCH=value)
 ARCH ?= $(shell arch)
 
 # Docker platform: resolve differences between Mac and Linux arch responses

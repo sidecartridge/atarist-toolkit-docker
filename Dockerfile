@@ -1,4 +1,4 @@
-#Download base image ubuntu 20.04
+#Download base image ubuntu 24.04
 FROM ubuntu:24.04 AS base_os
 
 # add vriviere's pre-built Ubuntu packages for cross-mint-essentials for x86_64 and aarch64

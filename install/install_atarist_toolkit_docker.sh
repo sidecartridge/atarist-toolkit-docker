@@ -32,11 +32,11 @@ if [ -z "\${VERSION}" ]; then
     VERSION="latest"
 fi
 if [ -z "\${ST_WORKING_FOLDER}" ]; then
-    ST_WORKING_FOLDER=\`pwd\`
+    ST_WORKING_FOLDER=$(pwd)
     if [ "\${STCMD_QUIET}" != "1" ]; then
         echo "ST_WORKING_FOLDER is empty: using \${ST_WORKING_FOLDER} as absolute path to source code working folder."
     fi
-elif [ "\${STCMD_QUIET}" != "1" ]; then 
+elif [ "\${STCMD_QUIET}" != "1" ]; then
     echo "ST_WORKING_FOLDER is set: using \${ST_WORKING_FOLDER} as absolute path to source code working folder."
 fi
 THEDOCKER="${DOCKER_ACCOUNT}/atarist-toolkit-docker-${ARCH}:\${VERSION}"
