@@ -82,12 +82,12 @@ Open a terminal in your Operating System, and enter the following command:
 
 ```
 stcmd
-ST_WORKING_FOLDER is empty. Using \current\path as absolute path to the source code working folder.
+ST_WORKING_FOLDER is empty: using /current/path as absolute path to source code working folder.
 ```
 
 If you see the message above, congratulations! You have successfully installed the Atari ST development toolkit docker image. The message means that the optional environment variable with the working folder of your project is missing. We will explain in the next chapter how to configure it.
 
-If you would like to suppress this warning message, you can set the environment variable `STCMD_QUIET` to `1` in your shell configuration file.
+If you would like to suppress this message for future executions, you can set the environment variable `STCMD_QUIET` to `1` in your shell configuration file.
 
 ### Building your own docker image
 

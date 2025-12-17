@@ -28,17 +28,18 @@ docker pull ${THEDOCKER}
 echo "Installing the command stcmd in /usr/local/bin. Please enter your root password if prompted..."
 cat << EOF > /usr/local/bin/stcmd
 #!/bin/bash
-if [ -z "\$VERSION" ]; then
+if [ -z "\${VERSION}" ]; then
     VERSION="latest"
 fi
 if [ -z "\${ST_WORKING_FOLDER}" ]; then
     ST_WORKING_FOLDER=\`pwd\`
     if [ "\${STCMD_QUIET}" != "1" ]; then
-        echo "ST_WORKING_FOLDER is empty. Using \${ST_WORKING_FOLDER} as absolute path to the source code working folder."
+        echo "ST_WORKING_FOLDER is empty: using \${ST_WORKING_FOLDER} as absolute path to source code working folder."
     fi
+elif [ "\${STCMD_QUIET}" != "1" ]; then 
+    echo "ST_WORKING_FOLDER is set: using \${ST_WORKING_FOLDER} as absolute path to source code working folder."
 fi
-ARCH="${ARCH}"
-THEDOCKER="${DOCKER_ACCOUNT}/atarist-toolkit-docker-\${ARCH}:\${VERSION}"
+THEDOCKER="${DOCKER_ACCOUNT}/atarist-toolkit-docker-${ARCH}:\${VERSION}"
 THEUSER=\$(id -u)
 THEGROUP=\$(id -g)
 docker run --platform linux/${ARCH} -it --rm -v \${ST_WORKING_FOLDER}:'/tmp' --user "\${THEUSER}:\${THEGROUP}" \${THEDOCKER} \$@
