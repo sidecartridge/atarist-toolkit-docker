@@ -56,7 +56,7 @@ RUN \
 FROM libcmini AS dependencies
 # vriviere's pre-built Ubuntu packages for cross-mint-essentials for x86_64 and aarch64
 RUN \
-  set DEBIAN_FRONTEND=noninteractive && \
+  export DEBIAN_FRONTEND=noninteractive && \
   apt -y update && \
   apt -y install software-properties-common && \
   add-apt-repository ppa:vriviere/ppa && \

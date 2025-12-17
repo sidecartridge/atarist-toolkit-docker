@@ -7,7 +7,7 @@ CURRENT_DATE = $(shell date -u +"%Y-%m-%d")
 ARCH ?= $(shell arch)
 
 # Docker platform: resolve differences between Mac and Linux arch responses
-ifeq ($(ARCH),i386) # Intel Mac
+ifeq ($(ARCH),i386) # Some Intel Mac
 	DOCKER_PLATFORM := x86_64
 else ifeq ($(ARCH),aarch64) # Linux ARM64
 	DOCKER_PLATFORM := arm64
