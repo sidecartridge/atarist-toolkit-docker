@@ -103,9 +103,9 @@ And if successful you will find stcmd installation script in **target/release/in
 ```
 docker images
 REPOSITORY                                  TAG                IMAGE ID       CREATED       SIZE
-logronoide/atarist-toolkit-docker-aarch64   0.0.3              650b5a8d8b13   2 hours ago   942MB
-logronoide/atarist-toolkit-docker-aarch64   0.0.3-2024-10-03   650b5a8d8b13   2 hours ago   942MB
-logronoide/atarist-toolkit-docker-aarch64   latest             650b5a8d8b13   2 hours ago   942MB
+logronoide/atarist-toolkit-docker-arm64     0.0.3              650b5a8d8b13   2 hours ago   942MB
+logronoide/atarist-toolkit-docker-arm64     0.0.3-2024-10-03   650b5a8d8b13   2 hours ago   942MB
+logronoide/atarist-toolkit-docker-arm64     latest             650b5a8d8b13   2 hours ago   942MB
 ...
 logronoide/atarist-toolkit-docker-x86_64    latest             7496991add79   6 minutes ago 1.07GB
 
@@ -116,7 +116,27 @@ so install this script
 sudo bash -c target/release/install_atarist_toolkit_docker.sh
 ```
 
-Typical extensions are x86\_64 for Intel x86, arm64 for MacOS M1,2,3 and aarch64 for Raspberry Pi
+Extensions are `x86_64` for builds targeting 64-bit AMD/Intel x86 platforms and `arm64` for 64-bit ARM platforms, including M-series Macs and Raspberry Pi.
+
+### Installing a specific version and/or custom build
+
+By default, the `latest` version will be installed, but if you would like to install a specific version you can specify this as a parameter, for example to install version `1.2.3`:
+
+```
+sudo bash -c ./install_atarist_toolkit_docker.sh 1.2.3
+```
+
+To install a custom build from your own Docker repository, you can use the following syntax, replacing `myaccount` with your own:
+
+```
+sudo DOCKER_ACCOUNT=myaccount bash -c ./install_atarist_toolkit_docker.sh
+```
+
+And you can or course combine both to install a spoecific version of your own Docker respository:
+
+```
+sudo DOCKER_ACCOUNT=myaccount bash -c ./install_atarist_toolkit_docker.sh 1.2.3
+```
 
 ## Start using the Atari ST development toolkit docker image
 

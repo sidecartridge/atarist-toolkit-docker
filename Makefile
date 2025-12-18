@@ -27,8 +27,8 @@ STCMD_COMMAND := $(shell cat stcmd.template)
 # The docker tag name
 DOCKER_TAG_NAME = latest
 
-# Docker account
-DOCKER_ACCOUNT = neilrackett
+# Docker account (override with: make DOCKER_ACCOUNT=value or export DOCKER_ACCOUNT=value)
+DOCKER_ACCOUNT ?= neilrackett
 
 # Docker image name
 DOCKER_IMAGE_NAME = $(PROJECT)

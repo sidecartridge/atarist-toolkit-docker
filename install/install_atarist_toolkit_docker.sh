@@ -7,13 +7,15 @@ else
     exit 1
 fi
 
-DOCKER_ACCOUNT=neilrackett
+if [ -z "${DOCKER_ACCOUNT}" ]; then
+    DOCKER_ACCOUNT=neilrackett
+fi
 VERSION=$1
 if [ $# -eq 0 ]; then
     echo "No version supplied. Using latest version."
     VERSION="latest"
 fi
-ARCH=`arch`
+ARCH=$(arch)
 if [ "${ARCH}" = "i386" ]; then
     ARCH="x86_64"
 fi
@@ -28,6 +30,9 @@ docker pull ${THEDOCKER}
 echo "Installing the command stcmd in /usr/local/bin. Please enter your root password if prompted..."
 cat << EOF > /usr/local/bin/stcmd
 #!/bin/bash
+if [ -z "\${DOCKER_ACCOUNT}" ]; then
+    DOCKER_ACCOUNT=neilrackett
+fi
 if [ -z "\${VERSION}" ]; then
     VERSION="latest"
 fi
@@ -39,7 +44,7 @@ if [ -z "\${ST_WORKING_FOLDER}" ]; then
 elif [ "\${STCMD_QUIET}" != "1" ]; then
     echo "ST_WORKING_FOLDER is set: using \${ST_WORKING_FOLDER} as absolute path to source code working folder."
 fi
-THEDOCKER="${DOCKER_ACCOUNT}/atarist-toolkit-docker-${ARCH}:\${VERSION}"
+THEDOCKER="\${DOCKER_ACCOUNT}/atarist-toolkit-docker-${ARCH}:\${VERSION}"
 THEUSER=\$(id -u)
 THEGROUP=\$(id -g)
 docker run --platform linux/${ARCH} -it --rm -v \${ST_WORKING_FOLDER}:'/tmp' --user "\${THEUSER}:\${THEGROUP}" \${THEDOCKER} \$@
