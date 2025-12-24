@@ -6,8 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
-    steps:
+    runs-on: ubuntu-24.04
     - uses: actions/checkout@v2
     - name: Run - build
       run: make build
