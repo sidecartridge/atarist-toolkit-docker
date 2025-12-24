@@ -8,7 +8,7 @@ else
 fi
 
 if [ -z "${DOCKER_ACCOUNT}" ]; then
-    DOCKER_ACCOUNT=neilrackett
+    DOCKER_ACCOUNT=logronoide
 fi
 VERSION=$1
 if [ $# -eq 0 ]; then
@@ -31,7 +31,7 @@ echo "Installing the command stcmd in /usr/local/bin. Please enter your root pas
 cat << EOF > /usr/local/bin/stcmd
 #!/bin/bash
 if [ -z "\${DOCKER_ACCOUNT}" ]; then
-    DOCKER_ACCOUNT=neilrackett
+    DOCKER_ACCOUNT=logronoide
 fi
 if [ -z "\${VERSION}" ]; then
     VERSION="latest"

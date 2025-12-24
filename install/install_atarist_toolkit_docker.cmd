@@ -10,7 +10,7 @@ if %errorlevel% neq 0 (
 )
 echo Docker is installed...
 
-if "%DOCKER_ACCOUNT%"=="" set "DOCKER_ACCOUNT=neilrackett"
+if "%DOCKER_ACCOUNT%"=="" set "DOCKER_ACCOUNT=logronoide"
 
 set "VERSION=%~1"
 if "%~1"=="" (
@@ -38,7 +38,7 @@ echo Installing the command stcmd in %TARGET%...
 > "%TARGET%" (
     echo @echo off
     echo setlocal
-    echo if "%%DOCKER_ACCOUNT%%"=="" set "DOCKER_ACCOUNT=neilrackett"
+    echo if "%%DOCKER_ACCOUNT%%"=="" set "DOCKER_ACCOUNT=logronoide"
     echo if "%%VERSION%%"=="" set "VERSION=latest"
     echo if "%%ST_WORKING_FOLDER%%"=="" ^(
     echo     set "ST_WORKING_FOLDER=%%cd%%"
