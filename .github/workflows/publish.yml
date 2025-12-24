@@ -10,11 +10,15 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        arch: [x86_64]
+        arch: [x86_64, arm64]
     steps:
     - uses: actions/checkout@v2
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
     - name: Run build and publish
-      run: make all
+      run: make all ARCH=${{ matrix.arch }}
       env:
         DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
@@ -35,6 +39,9 @@ jobs:
           - os: ubuntu-latest
             artifact_name: install_atarist_toolkit_docker.sh
             asset_name: install_atarist_toolkit_docker.sh
+          - os: ubuntu-latest
+            artifact_name: install_atarist_toolkit_docker.cmd
+            asset_name: install_atarist_toolkit_docker.cmd
 
     steps:
     - uses: actions/checkout@v2
