@@ -132,7 +132,7 @@ To install a custom build from your own Docker repository, you can use the follo
 sudo DOCKER_ACCOUNT=myaccount bash -c ./install_atarist_toolkit_docker.sh
 ```
 
-And you can or course combine both to install a spoecific version of your own Docker respository:
+And you can of course combine both to install a specific version of your own Docker repository:
 
 ```
 sudo DOCKER_ACCOUNT=myaccount bash -c ./install_atarist_toolkit_docker.sh 1.2.3
