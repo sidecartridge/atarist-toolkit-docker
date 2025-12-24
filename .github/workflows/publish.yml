@@ -12,7 +12,7 @@ jobs:
       matrix:
         arch: [x86_64, arm64]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -22,13 +22,13 @@ jobs:
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-      - name: Sync
-        uses: ms-jpq/sync-dockerhub-readme@v1
+      - name: Sync Docker Hub description
+        uses: peter-evans/dockerhub-description@v5
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           repository: logronoide/atarist-toolkit-docker-${{ matrix.arch }}
-          readme: "./README.md"
+          readme-filepath: ./README.md
   release:
     name: Release for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -44,7 +44,7 @@ jobs:
             asset_name: install_atarist_toolkit_docker.cmd
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Run build and publish
         run: make release
       - name: Upload shell scripts to release with version
