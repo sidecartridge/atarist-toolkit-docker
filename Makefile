@@ -21,14 +21,11 @@ PROJECT := atarist-toolkit-docker-$(DOCKER_PLATFORM)
 # Version from file
 VERSION := $(shell cat version.txt)
 
-# STCMD command from file
-STCMD_COMMAND := $(shell cat stcmd.template)
-
-# The docker tag name
-DOCKER_TAG_NAME = latest
+## Build tag is the current version; latest is added as an alias
+DOCKER_TAG_NAME = $(VERSION)
 
 # Docker account (override with: make DOCKER_ACCOUNT=value or export DOCKER_ACCOUNT=value)
-DOCKER_ACCOUNT ?= neilrackett
+DOCKER_ACCOUNT ?= logronoide
 
 # Docker image name
 DOCKER_IMAGE_NAME = $(PROJECT)
@@ -46,6 +43,7 @@ all: clean build publish
 release:
 	mkdir -p target/release/
 	cp install/install_atarist_toolkit_docker.sh target/release/
+	cp install/install_atarist_toolkit_docker.cmd target/release/
 	chmod +x target/release/install_atarist_toolkit_docker.sh
 
 ## Clean docker image
@@ -60,6 +58,7 @@ clean:
 build:
 	@echo "Building docker image $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG_NAME)..."
 	docker build --platform=linux/${DOCKER_PLATFORM} -f Dockerfile -t $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG_NAME) .
+	docker tag $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG_NAME) $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):latest
 
 ## Tag docker images
 .PHONY: tag-images
