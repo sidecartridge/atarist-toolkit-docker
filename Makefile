@@ -81,3 +81,8 @@ tag:
 	git tag latest && git push origin latest && \
 	git tag v$(VERSION) && git push origin v$(VERSION) && \
 	echo "Tagged: $(VERSION)"
+
+## Show current version
+.PHONY: version
+version:
+	@echo $(VERSION)
