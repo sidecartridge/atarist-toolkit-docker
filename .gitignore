@@ -140,3 +140,4 @@ stcmd
 install/linux.sh
 install/macos.sh
 install/windows.bat
+.DS_Store

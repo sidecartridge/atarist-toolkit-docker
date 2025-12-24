@@ -49,16 +49,18 @@ curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/downlo
 ```
 or as sudo
 ```
-sudo bash -c "$(curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolit_docker.sh)"
+sudo bash -c "$(curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh)"
 ```
 **For Windows**
 ```
-Use WSL Ubuntu and proceed with the normal linux download inside WSL shell..
+Download and run the native installer:
+https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.cmd
 ```
 
 ### Manual installation
 The developer can download manually the installation scripts from:
-- [install_atarist_toolkit.sh](https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh)
+- [install_atarist_toolkit_docker.sh](https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh)
+- [install_atarist_toolkit_docker.cmd](https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.cmd)
 
 Once the script is downloaded, the developer can execute it in the terminal of the Operating System.
 
@@ -66,6 +68,10 @@ Once the script is downloaded, the developer can execute it in the terminal of t
 ```
 chmod +x install_atarist_toolkit_docker.sh
 sudo bash -c ./install_atarist_toolkit_docker.sh
+```
+**For Windows**
+```
+Run install_atarist_toolkit_docker.cmd from a Command Prompt.
 ```
 
 ### What the installation script does
@@ -82,49 +88,87 @@ Open a terminal in your Operating System, and enter the following command:
 
 ```
 stcmd
-$ST_WORKING_FOLDER is empty. It should have the absolute path to the source code.
+ST_WORKING_FOLDER is empty: using /current/path as absolute path to source code working folder.
 ```
 
-If you see the message above, congratulations! You have successfully installed the Atari ST development toolkit docker image. The message means that the environment variable with the working folder of your project is missing. We will explain in the next chapter how to configure it.
+If you see the message above, congratulations! You have successfully installed the Atari ST development toolkit docker image. The message means that the optional environment variable with the working folder of your project is missing. We will explain in the next chapter how to configure it.
+
+If you would like to suppress this message for future executions, you can set the environment variable `STCMD_QUIET` to `1` in your shell configuration file.
 
 ### Building your own docker image
 
-You will need a docker environment, space and a decent processor.
+You will need a docker environment, space and a decent processor. If you plan to publish or tag images under your own Docker Hub account, pass your account via `DOCKER_ACCOUNT`, otherwise the default `logronoide` account will be used.
 
 ```
 git clone git@github.com:sidecartridge/atarist-toolkit-docker.git
 cd atarist-toolkit-docker
-make clean build release
+make DOCKER_ACCOUNT=myaccount clean build release
 ```
 
-And if successful you will find stcmd installation script in **target/release/install_atarist_toolkit_docker.sh** and a docker image, for example:
+And if successful you will find the installer scripts in **target/release/install_atarist_toolkit_docker.sh** and **target/release/install_atarist_toolkit_docker.cmd**, plus a docker image, for example:
 ```
 docker images
 REPOSITORY                                  TAG                IMAGE ID       CREATED       SIZE
-logronoide/atarist-toolkit-docker-aarch64   0.0.3              650b5a8d8b13   2 hours ago   942MB
-logronoide/atarist-toolkit-docker-aarch64   0.0.3-2024-10-03   650b5a8d8b13   2 hours ago   942MB
-logronoide/atarist-toolkit-docker-aarch64   latest             650b5a8d8b13   2 hours ago   942MB
+logronoide/atarist-toolkit-docker-arm64     0.0.3              650b5a8d8b13   2 hours ago   942MB
+logronoide/atarist-toolkit-docker-arm64     0.0.3-2024-10-03   650b5a8d8b13   2 hours ago   942MB
+logronoide/atarist-toolkit-docker-arm64     latest             650b5a8d8b13   2 hours ago   942MB
 ...
 logronoide/atarist-toolkit-docker-x86_64    latest             7496991add79   6 minutes ago 1.07GB
 
 ```
 
+Local builds tag the current version and `latest`. Date-suffixed tags are created by `make tag-images` or `make publish`.
+
 so install this script
 ```
 sudo bash -c target/release/install_atarist_toolkit_docker.sh
 ```
+On Windows, run:
+```
+target/release/install_atarist_toolkit_docker.cmd
+```
 
-Typical extensions are x86\_64 for Intel x86, arm64 for MacOS M1,2,3 and aarch64 for Raspberry Pi
+Extensions are `x86_64` for builds targeting 64-bit AMD/Intel x86 platforms and `arm64` for 64-bit ARM platforms, including M-series Macs and Raspberry Pi.
+
+The Publish workflow builds and pushes both `x86_64` and `arm64` images.
+
+### Installing a specific version and/or custom build
+
+By default, the `latest` version will be installed, but if you would like to install a specific version you can specify this as a parameter, for example to install version `1.2.3`:
+
+```
+sudo bash -c ./install_atarist_toolkit_docker.sh 1.2.3
+```
+
+To install a custom build from your own Docker repository, you can use the following syntax, replacing `myaccount` with your own:
+
+```
+sudo DOCKER_ACCOUNT=myaccount bash -c ./install_atarist_toolkit_docker.sh
+```
+
+And you can of course combine both to install a specific version of your own Docker repository:
+
+```
+sudo DOCKER_ACCOUNT=myaccount bash -c ./install_atarist_toolkit_docker.sh 1.2.3
+```
 
 ## Start using the Atari ST development toolkit docker image
 
-### Configure the working folder
+### Default working folder
 
-The Atari ST development toolkit docker image needs to know where the source code of your project is located. To do this, you need to set the environment variable `$ST_WORKING_FOLDER` with the absolute path to the folder where your source code is located. 
+The Docker image guarantees that all the needed libraries and dependencies are in one place and managed by the container. The container has its own file system, and the files that are created in the container are not accessible from the host machine, so the Atari ST development toolkit docker image creates a folder on the host machine and mounts it in the container. This folder will be the working folder of your project.
 
-The Docker image guarantees that all the needed libraries and dependencies are in one place and managed by the container. Sadly, the container has it's own file system, and the files that are created in the container are not accessible from the host machine. To solve this problem, the Atari ST development toolkit docker image will create a folder in the host machine and mount it in the container. This folder will be the working folder of your project and it's in the `ST_WORKING_FOLDER` environment variable.
+When you run the command `stcmd` you will have full access to an Atari ST development environment running inside the container. `stcmd` passes your user and group id down to the docker container. This should ensure files created by the docker will be owned by you after the container exits.
 
-Example: If you have a project in the folder `/home/user/my-st-megademo`, you need to set the environment variable `$ST_WORKING_FOLDER` with the value `/home/user/my-st-megademo`:
+By default, the Atari ST development toolkit docker image automatically sets the current folder as the working folder of your project whenever you run `stcmd`.
+
+### Configuring a fixed working folder
+
+If you prefer, you can override the default behavior by setting the environment variable `ST_WORKING_FOLDER` to the absolute path of the folder where your source code is located. If this environment variable is set, the Atari ST development toolkit docker image will always use this folder as the working folder of your project, regardless of where you run the `stcmd` command from.
+
+#### Example
+
+If you have a project in the folder `/home/user/my-st-megademo`, you can set the environment variable `ST_WORKING_FOLDER` to the value `/home/user/my-st-megademo`:
 
 ```
 export ST_WORKING_FOLDER=/home/user/my-st-megademo
@@ -133,14 +177,6 @@ or
 ```
 cd /home/user/my-st-megademo
 export ST_WORKING_FOLDER=`pwd`
-```
-
-Now when you run the command `stcmd` you will have full access to an Atari ST development environment running inside the container. **stcmd** passes your user and group id down to the docker container. This should ensure files created by the docker will be owned by you after the container exits.
-
-And please, please, please:
-```
-Don't forget to set up the ST_WORKING_FOLDER environment variable pointing to the
-absolute path of your working folder.
 ```
 
 ### Set up a new C project
@@ -242,19 +278,13 @@ In the demo folder of the github repository you can find some examples of Atari 
 git clone git@github.com:sidecartridge/atarist-toolkit-docker.git
 ```
 
-Navigate to the different projects inside the `demo` folder and execute `make` to build. But, before you do that, you need to set the environment variable `$ST_WORKING_FOLDER` with the value of the absolute path of the demo folder:
-
-```
-export ST_WORKING_FOLDER=/home/user/atarist-toolkit-docker/demo/SUBPROJECT
-stcmd make
-```
+Navigate to the different projects inside the `demo` folder and execute `stcmd make` to build; if you have previously set `ST_WORKING_FOLDER`, run `unset ST_WORKING_FOLDER` to ensure that `stcmd` uses the current directory.
 
 Currently we have ASM, C, C\_ASM and C\_LIBCMINI demos.
 
 ### ASM
 ```
 pushd demo/ASM
-export ST_WORKING_FOLDER=`pwd`
 stcmd make
 ```
 
@@ -284,7 +314,6 @@ popd
 
 ```
 pushd demo/C
-export ST_WORKING_FOLDER=`pwd`
 stcmd make
 ```
 
@@ -309,7 +338,6 @@ popd
 ### C\_ASM
 ```
 pushd demo/C_ASM/
-export ST_WORKING_FOLDER=`pwd`
 stcmd make
 ```
 
@@ -364,7 +392,6 @@ popd
 ### C\_LIBCMINI
 ```
 pushd demo/C_LIBCMINI
-export ST_WORKING_FOLDER=`pwd`
 stcmd make
 ```
 
@@ -411,10 +438,10 @@ Now navigate to the `demo` folder of the AGT repository choose one of the sample
 cd agtools/demo/h-shmup
 ```
 
-All the projects need to setup the environment variable `AGTROOT` with the value of the absolute path of the AGT repository, but you don't need to do it because the Atari ST development toolkit docker image already does it for you. So, you can just execute `stcmd` to access to the environment of the container and run `make` to build the project. And of course, don't forget to set the `ST_WORKING_FOLDER` environment variable with the value of the absolute path of the demo folder:
+All the projects need to setup the environment variable `AGTROOT` with the value of the absolute path of the AGT repository, but you don't need to do it because the Atari ST development toolkit docker image already does it for you. So, you can just execute `stcmd` to access to the environment of the container and run `make` to build the project:
 
 ```
-ST_WORKING_FOLDER=$HOME/agtools/demo/h-shmup stcmd make
+stcmd make
 ```
 
 After a few minutes the project will create a `disk1` folder with the auto executable file and resources needed to run the game. 

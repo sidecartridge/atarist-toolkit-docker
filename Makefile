@@ -3,23 +3,29 @@ SHELL:=/bin/bash
 # Current date
 CURRENT_DATE = $(shell date -u +"%Y-%m-%d")
 
-# Machine arch
-ARCH = $(shell arch)
+# Machine arch (override with: make ARCH=value or export ARCH=value)
+ARCH ?= $(shell arch)
+
+# Docker platform: resolve differences between Mac and Linux arch responses
+ifeq ($(ARCH),i386) # Some Intel Mac
+	DOCKER_PLATFORM := x86_64
+else ifeq ($(ARCH),aarch64) # Linux ARM64
+	DOCKER_PLATFORM := arm64
+else
+	DOCKER_PLATFORM := $(ARCH)
+endif
 
 # Project name
-PROJECT := atarist-toolkit-docker-$(ARCH)
+PROJECT := atarist-toolkit-docker-$(DOCKER_PLATFORM)
 
 # Version from file
 VERSION := $(shell cat version.txt)
 
-# STCMD command from file
-STCMD_COMMAND := $(shell cat stcmd.template)
+## Build tag is the current version; latest is added as an alias
+DOCKER_TAG_NAME = $(VERSION)
 
-# The docker tag name
-DOCKER_TAG_NAME = latest
-
-# Docker account
-DOCKER_ACCOUNT = logronoide
+# Docker account (override with: make DOCKER_ACCOUNT=value or export DOCKER_ACCOUNT=value)
+DOCKER_ACCOUNT ?= logronoide
 
 # Docker image name
 DOCKER_IMAGE_NAME = $(PROJECT)
@@ -37,6 +43,7 @@ all: clean build publish
 release:
 	mkdir -p target/release/
 	cp install/install_atarist_toolkit_docker.sh target/release/
+	cp install/install_atarist_toolkit_docker.cmd target/release/
 	chmod +x target/release/install_atarist_toolkit_docker.sh
 
 ## Clean docker image
@@ -49,7 +56,9 @@ clean:
 ## Build docker image
 .PHONY: build
 build:
-	docker build -f Dockerfile -t $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG_NAME) .
+	@echo "Building docker image $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG_NAME)..."
+	docker build --platform=linux/${DOCKER_PLATFORM} -f Dockerfile -t $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG_NAME) .
+	docker tag $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG_NAME) $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):latest
 
 ## Tag docker images
 .PHONY: tag-images
@@ -72,3 +81,8 @@ tag:
 	git tag latest && git push origin latest && \
 	git tag v$(VERSION) && git push origin v$(VERSION) && \
 	echo "Tagged: $(VERSION)"
+
+## Show current version
+.PHONY: version
+version:
+	@echo $(VERSION)
