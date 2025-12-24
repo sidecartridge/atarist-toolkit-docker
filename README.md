@@ -49,16 +49,18 @@ curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/downlo
 ```
 or as sudo
 ```
-sudo bash -c "$(curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolit_docker.sh)"
+sudo bash -c "$(curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh)"
 ```
 **For Windows**
 ```
-Use WSL Ubuntu and proceed with the normal linux download inside WSL shell..
+Download and run the native installer:
+https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.cmd
 ```
 
 ### Manual installation
 The developer can download manually the installation scripts from:
-- [install_atarist_toolkit.sh](https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh)
+- [install_atarist_toolkit_docker.sh](https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh)
+- [install_atarist_toolkit_docker.cmd](https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.cmd)
 
 Once the script is downloaded, the developer can execute it in the terminal of the Operating System.
 
@@ -66,6 +68,10 @@ Once the script is downloaded, the developer can execute it in the terminal of t
 ```
 chmod +x install_atarist_toolkit_docker.sh
 sudo bash -c ./install_atarist_toolkit_docker.sh
+```
+**For Windows**
+```
+Run install_atarist_toolkit_docker.cmd from a Command Prompt.
 ```
 
 ### What the installation script does
@@ -91,15 +97,15 @@ If you would like to suppress this message for future executions, you can set th
 
 ### Building your own docker image
 
-You will need a docker environment, space and a decent processor.
+You will need a docker environment, space and a decent processor. If you plan to publish or tag images under your own Docker Hub account, pass your account via `DOCKER_ACCOUNT`, otherwise the default `logronoide` account will be used.
 
 ```
 git clone git@github.com:sidecartridge/atarist-toolkit-docker.git
 cd atarist-toolkit-docker
-make clean build release
+make DOCKER_ACCOUNT=myaccount clean build release
 ```
 
-And if successful you will find stcmd installation script in **target/release/install_atarist_toolkit_docker.sh** and a docker image, for example:
+And if successful you will find the installer scripts in **target/release/install_atarist_toolkit_docker.sh** and **target/release/install_atarist_toolkit_docker.cmd**, plus a docker image, for example:
 ```
 docker images
 REPOSITORY                                  TAG                IMAGE ID       CREATED       SIZE
@@ -111,12 +117,20 @@ logronoide/atarist-toolkit-docker-x86_64    latest             7496991add79   6 
 
 ```
 
+Local builds tag the current version and `latest`. Date-suffixed tags are created by `make tag-images` or `make publish`.
+
 so install this script
 ```
 sudo bash -c target/release/install_atarist_toolkit_docker.sh
 ```
+On Windows, run:
+```
+target/release/install_atarist_toolkit_docker.cmd
+```
 
 Extensions are `x86_64` for builds targeting 64-bit AMD/Intel x86 platforms and `arm64` for 64-bit ARM platforms, including M-series Macs and Raspberry Pi.
+
+The Publish workflow builds and pushes both `x86_64` and `arm64` images.
 
 ### Installing a specific version and/or custom build
 
