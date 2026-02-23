@@ -95,6 +95,8 @@ If you see the message above, congratulations! You have successfully installed t
 
 If you would like to suppress this message for future executions, you can set the environment variable `STCMD_QUIET` to `1` in your shell configuration file.
 
+If you need to run `stcmd` in a non-interactive context (e.g. from a script or an AI agent) where a TTY is not available, set the environment variable `STCMD_NO_TTY` to `1`. This removes the `-it` flags from the underlying `docker run` command.
+
 ### Building your own docker image
 
 You will need a docker environment, space and a decent processor. If you plan to publish or tag images under your own Docker Hub account, pass your account via `DOCKER_ACCOUNT`, otherwise the default `logronoide` account will be used.

@@ -47,7 +47,11 @@ fi
 THEDOCKER="\${DOCKER_ACCOUNT}/atarist-toolkit-docker-${ARCH}:\${VERSION}"
 THEUSER=\$(id -u)
 THEGROUP=\$(id -g)
-docker run --platform linux/${ARCH} -it --rm -v \${ST_WORKING_FOLDER}:'/tmp' --user "\${THEUSER}:\${THEGROUP}" \${THEDOCKER} \$@
+TTY_FLAG="-it"
+if [ "\${STCMD_NO_TTY}" = "1" ]; then
+    TTY_FLAG=""
+fi
+docker run --platform linux/${ARCH} \${TTY_FLAG} --rm -v \${ST_WORKING_FOLDER}:'/tmp' --user "\${THEUSER}:\${THEGROUP}" \${THEDOCKER} \$@
 EOF
 
 chmod +x /usr/local/bin/stcmd
