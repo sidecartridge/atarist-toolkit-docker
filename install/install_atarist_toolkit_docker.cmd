@@ -47,7 +47,9 @@ echo Installing the command stcmd in %TARGET%...
     echo     if not "%%STCMD_QUIET%%"=="1" echo ST_WORKING_FOLDER is set: using %%ST_WORKING_FOLDER%% as absolute path to source code working folder.
     echo ^)
     echo set "THEDOCKER=%%DOCKER_ACCOUNT%%/atarist-toolkit-docker-%ARCH%:%%VERSION%%"
-    echo docker run --platform linux/%ARCH% -it --rm -v "%%ST_WORKING_FOLDER%%:/tmp" %%THEDOCKER%% %%*
+    echo set "TTY_FLAG=-it"
+    echo if "%%STCMD_NO_TTY%%"=="1" set "TTY_FLAG="
+    echo docker run --platform linux/%ARCH% %%TTY_FLAG%% --rm -v "%%ST_WORKING_FOLDER%%:/tmp" %%THEDOCKER%% %%*
 )
 
 REM Add INSTALL_DIR to user PATH using reg.exe
