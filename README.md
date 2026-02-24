@@ -45,22 +45,22 @@ The installation process will start executing the following script:
 
 **For Linux, MacOS or RPi**
 ```
-curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/v1.2.0/install_atarist_toolkit_docker.sh | bash
+curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh | bash
 ```
 or as sudo
 ```
-sudo bash -c "$(curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/v1.2.0/install_atarist_toolkit_docker.sh)"
+sudo bash -c "$(curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh)"
 ```
 **For Windows**
 ```
 Download and run the native installer:
-https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/v1.2.0/install_atarist_toolkit_docker.cmd
+https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.cmd
 ```
 
 ### Manual installation
 The developer can download manually the installation scripts from:
-- [install_atarist_toolkit_docker.sh](https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/v1.2.0/install_atarist_toolkit_docker.sh)
-- [install_atarist_toolkit_docker.cmd](https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/v1.2.0/install_atarist_toolkit_docker.cmd)
+- [install_atarist_toolkit_docker.sh](https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.sh)
+- [install_atarist_toolkit_docker.cmd](https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/latest/install_atarist_toolkit_docker.cmd)
 
 Once the script is downloaded, the developer can execute it in the terminal of the Operating System.
 
@@ -93,9 +93,10 @@ ST_WORKING_FOLDER is empty: using /current/path as absolute path to source code 
 
 If you see the message above, congratulations! You have successfully installed the Atari ST development toolkit docker image. The message means that the optional environment variable with the working folder of your project is missing. We will explain in the next chapter how to configure it.
 
-If you would like to suppress this message for future executions, you can set the environment variable `STCMD_QUIET` to `1` in your shell configuration file.
+### Optional runtime flags
 
-If you need to run `stcmd` in a non-interactive context (e.g. from a script or an AI agent) where a TTY is not available, set the environment variable `STCMD_NO_TTY` to `1`. This removes the `-it` flags from the underlying `docker run` command.
+- `STCMD_QUIET`: Suppresses the informational message about `ST_WORKING_FOLDER` so non-interactive scripts stay clean. Set it to `1` in your shell profile if you prefer silent startup.
+- `STCMD_NO_TTY`: Removes the `-it` flags from the underlying `docker run` call. Set to `1` when running `stcmd` from automation that has no TTY available (CI pipelines, cron, AI agents, etc.).
 
 ### Building your own docker image
 
