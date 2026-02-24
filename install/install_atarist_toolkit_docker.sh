@@ -10,10 +10,10 @@ fi
 if [ -z "${DOCKER_ACCOUNT}" ]; then
     DOCKER_ACCOUNT=logronoide
 fi
-VERSION=$1
+STCMD_IMAGE_TAG=$1
 if [ $# -eq 0 ]; then
     echo "No version supplied. Using latest version."
-    VERSION="latest"
+    STCMD_IMAGE_TAG="latest"
 fi
 ARCH=$(arch)
 if [ "${ARCH}" = "i386" ]; then
@@ -23,7 +23,7 @@ if [ "${ARCH}" = "aarch64" ]; then
     ARCH="arm64"
 fi
 
-THEDOCKER="${DOCKER_ACCOUNT}/atarist-toolkit-docker-${ARCH}:${VERSION}"
+THEDOCKER="${DOCKER_ACCOUNT}/atarist-toolkit-docker-${ARCH}:${STCMD_IMAGE_TAG}"
 echo "Pulling image ${THEDOCKER}..."
 docker pull ${THEDOCKER}
 
@@ -33,8 +33,8 @@ cat << EOF > /usr/local/bin/stcmd
 if [ -z "\${DOCKER_ACCOUNT}" ]; then
     DOCKER_ACCOUNT=logronoide
 fi
-if [ -z "\${VERSION}" ]; then
-    VERSION="latest"
+if [ -z "\${STCMD_IMAGE_TAG}" ]; then
+    STCMD_IMAGE_TAG="latest"
 fi
 if [ -z "\${ST_WORKING_FOLDER}" ]; then
     ST_WORKING_FOLDER=\$(pwd)
@@ -44,7 +44,7 @@ if [ -z "\${ST_WORKING_FOLDER}" ]; then
 elif [ "\${STCMD_QUIET}" != "1" ]; then
     echo "ST_WORKING_FOLDER is set: using \${ST_WORKING_FOLDER} as absolute path to source code working folder."
 fi
-THEDOCKER="\${DOCKER_ACCOUNT}/atarist-toolkit-docker-${ARCH}:\${VERSION}"
+THEDOCKER="\${DOCKER_ACCOUNT}/atarist-toolkit-docker-${ARCH}:\${STCMD_IMAGE_TAG}"
 THEUSER=\$(id -u)
 THEGROUP=\$(id -g)
 TTY_FLAG="-it"

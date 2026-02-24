@@ -12,10 +12,10 @@ echo Docker is installed...
 
 if "%DOCKER_ACCOUNT%"=="" set "DOCKER_ACCOUNT=logronoide"
 
-set "VERSION=%~1"
+set "STCMD_IMAGE_TAG=%~1"
 if "%~1"=="" (
     echo No version supplied. Using latest version.
-    set "VERSION=latest"
+    set "STCMD_IMAGE_TAG=latest"
 )
 
 set "ARCH=%PROCESSOR_ARCHITECTURE%"
@@ -24,7 +24,7 @@ if /I "%ARCH%"=="x86" set "ARCH=x86_64"
 if /I "%ARCH%"=="AMD64" set "ARCH=x86_64"
 if /I "%ARCH%"=="ARM64" set "ARCH=arm64"
 
-set "THEDOCKER=%DOCKER_ACCOUNT%/atarist-toolkit-docker-%ARCH%:%VERSION%"
+set "THEDOCKER=%DOCKER_ACCOUNT%/atarist-toolkit-docker-%ARCH%:%STCMD_IMAGE_TAG%"
 echo Pulling image %THEDOCKER%...
 docker pull %THEDOCKER%
 
@@ -39,14 +39,14 @@ echo Installing the command stcmd in %TARGET%...
     echo @echo off
     echo setlocal
     echo if "%%DOCKER_ACCOUNT%%"=="" set "DOCKER_ACCOUNT=logronoide"
-    echo if "%%VERSION%%"=="" set "VERSION=latest"
+    echo if "%%STCMD_IMAGE_TAG%%"=="" set "STCMD_IMAGE_TAG=latest"
     echo if "%%ST_WORKING_FOLDER%%"=="" ^(
     echo     set "ST_WORKING_FOLDER=%%cd%%"
     echo     if not "%%STCMD_QUIET%%"=="1" echo ST_WORKING_FOLDER is empty: using %%cd%% as absolute path to source code working folder.
     echo ^) else ^(
     echo     if not "%%STCMD_QUIET%%"=="1" echo ST_WORKING_FOLDER is set: using %%ST_WORKING_FOLDER%% as absolute path to source code working folder.
     echo ^)
-    echo set "THEDOCKER=%%DOCKER_ACCOUNT%%/atarist-toolkit-docker-%ARCH%:%%VERSION%%"
+    echo set "THEDOCKER=%%DOCKER_ACCOUNT%%/atarist-toolkit-docker-%ARCH%:%%STCMD_IMAGE_TAG%%"
     echo set "TTY_FLAG=-it"
     echo if "%%STCMD_NO_TTY%%"=="1" set "TTY_FLAG="
     echo docker run --platform linux/%ARCH% %%TTY_FLAG%% --rm -v "%%ST_WORKING_FOLDER%%:/tmp" %%THEDOCKER%% %%*

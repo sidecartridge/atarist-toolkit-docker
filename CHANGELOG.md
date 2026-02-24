@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.2.1 (2026-02-24) - bugfix release
+
+### Fixes
+- Replaced the installer `VERSION` variable with `STCMD_IMAGE_TAG` (and updated the generated `stcmd` wrappers) to avoid clobbering host environment variables.
+- README now references the `latest` release assets and documents the `STCMD_QUIET` / `STCMD_NO_TTY` runtime flags so automation is easier to configure.
+- The publish Make target pushes the `latest` Docker tag alongside versioned tags, ensuring Docker Hub always exposes a rolling build.
+
+## v1.2.0 (2026-02-10) - release
+
+### Features
+- Added the `STCMD_NO_TTY` environment variable so `stcmd` can run from CI scripts and other non-interactive contexts without allocating a TTY.
+
 ## v1.1.0 (2025-12-24) - release
 
 ### Features
