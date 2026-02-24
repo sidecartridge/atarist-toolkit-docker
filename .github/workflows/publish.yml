@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -32,35 +35,28 @@ jobs:
           readme-filepath: ./README.md
 
   release:
-    name: Release for ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     needs: [build]
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            artifact_name: install_atarist_toolkit_docker.sh
-            asset_name: install_atarist_toolkit_docker.sh
-          - os: ubuntu-latest
-            artifact_name: install_atarist_toolkit_docker.cmd
-            asset_name: install_atarist_toolkit_docker.cmd
     steps:
       - uses: actions/checkout@v4
-      - name: Run build and publish
+      - name: Read version
+        id: version
+        run: echo "value=$(tr -d '[:space:]' < version.txt)" >> "$GITHUB_OUTPUT"
+      - name: Prepare release artifacts
         run: make release
-      - name: Upload shell scripts to release with version
+      - name: Upload installer scripts to versioned release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/release/${{ matrix.artifact_name }}
-          asset_name: ${{ matrix.asset_name }}
-          tag: ${{ github.ref }}
+          file: target/release/install_atarist_toolkit_docker.*
+          file_glob: true
+          tag: v${{ steps.version.outputs.value }}
           overwrite: true
-      - name: Upload shell scripts to latest release
+      - name: Upload installer scripts to latest release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/release/${{ matrix.artifact_name }}
-          asset_name: ${{ matrix.asset_name }}
+          file: target/release/install_atarist_toolkit_docker.*
+          file_glob: true
           tag: latest
           overwrite: true
