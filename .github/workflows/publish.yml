@@ -30,6 +30,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           repository: logronoide/atarist-toolkit-docker-${{ matrix.arch }}
           readme-filepath: ./README.md
+
   release:
     name: Release for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -43,7 +44,6 @@ jobs:
           - os: ubuntu-latest
             artifact_name: install_atarist_toolkit_docker.cmd
             asset_name: install_atarist_toolkit_docker.cmd
-
     steps:
       - uses: actions/checkout@v4
       - name: Run build and publish
@@ -55,4 +55,12 @@ jobs:
           file: target/release/${{ matrix.artifact_name }}
           asset_name: ${{ matrix.asset_name }}
           tag: ${{ github.ref }}
+          overwrite: true
+      - name: Upload shell scripts to latest release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/release/${{ matrix.artifact_name }}
+          asset_name: ${{ matrix.asset_name }}
+          tag: latest
           overwrite: true
