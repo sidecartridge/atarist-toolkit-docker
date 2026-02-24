@@ -45,22 +45,22 @@ The installation process will start executing the following script:
 
 **For Linux, MacOS or RPi**
 ```
-curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/v1.1.0/install_atarist_toolkit_docker.sh | bash
+curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/v1.2.0/install_atarist_toolkit_docker.sh | bash
 ```
 or as sudo
 ```
-sudo bash -c "$(curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/v1.1.0/install_atarist_toolkit_docker.sh)"
+sudo bash -c "$(curl -sL https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/v1.2.0/install_atarist_toolkit_docker.sh)"
 ```
 **For Windows**
 ```
 Download and run the native installer:
-https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/v1.1.0/install_atarist_toolkit_docker.cmd
+https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/v1.2.0/install_atarist_toolkit_docker.cmd
 ```
 
 ### Manual installation
 The developer can download manually the installation scripts from:
-- [install_atarist_toolkit_docker.sh](https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/v1.1.0/install_atarist_toolkit_docker.sh)
-- [install_atarist_toolkit_docker.cmd](https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/v1.1.0/install_atarist_toolkit_docker.cmd)
+- [install_atarist_toolkit_docker.sh](https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/v1.2.0/install_atarist_toolkit_docker.sh)
+- [install_atarist_toolkit_docker.cmd](https://github.com/sidecartridge/atarist-toolkit-docker/releases/download/v1.2.0/install_atarist_toolkit_docker.cmd)
 
 Once the script is downloaded, the developer can execute it in the terminal of the Operating System.
 
