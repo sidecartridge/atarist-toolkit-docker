@@ -73,6 +73,7 @@ publish: build tag-images
 	docker push "${DOCKER_ACCOUNT}/${DOCKER_IMAGE_NAME}:$(DOCKER_TAG_NAME)"
 	docker push "${DOCKER_ACCOUNT}/${DOCKER_IMAGE_NAME}:${VERSION}"
 	docker push "${DOCKER_ACCOUNT}/${DOCKER_IMAGE_NAME}:${VERSION}-${CURRENT_DATE}"
+	docker push "${DOCKER_ACCOUNT}/${DOCKER_IMAGE_NAME}:latest"
 
 ## Tag this version
 .PHONY: tag
