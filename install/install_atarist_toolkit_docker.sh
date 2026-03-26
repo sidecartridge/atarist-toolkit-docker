@@ -34,7 +34,7 @@ if [ -z "\${DOCKER_ACCOUNT}" ]; then
     DOCKER_ACCOUNT=${DOCKER_ACCOUNT}
 fi
 if [ -z "\${STCMD_IMAGE_TAG}" ]; then
-    STCMD_IMAGE_TAG="latest"
+    STCMD_IMAGE_TAG="${STCMD_IMAGE_TAG}"
 fi
 if [ -z "\${ST_WORKING_FOLDER}" ]; then
     ST_WORKING_FOLDER=\$(pwd)
