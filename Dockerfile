@@ -66,6 +66,7 @@ RUN \
 # ---- Automake toolchain ----
 FROM dependencies AS automake_tools
 RUN \
+  export DEBIAN_FRONTEND=noninteractive && \
   apt -y install autoconf automake libtool pkg-config
 
 # ---- Build AGT tools ----
