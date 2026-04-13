@@ -61,16 +61,21 @@ RUN \
   apt -y install software-properties-common && \
   add-apt-repository ppa:vriviere/ppa && \
   apt -y update && \
-  apt -y install cross-mint-essential cflib-m68k-atari-mint gemma-m68k-atari-mint ldg-m68k-atari-mint sdl-m68k-atari-mint ncurses-m68k-atari-mint zlib-m68k-atari-mint readline-m68k-atari-mint openssl-m68k-atari-mint
+  apt -y install cross-mint-essential cflib-m68k-atari-mint gemma-m68k-atari-mint gemlib-m68k-atari-mint ldg-m68k-atari-mint sdl-m68k-atari-mint ncurses-m68k-atari-mint zlib-m68k-atari-mint readline-m68k-atari-mint openssl-m68k-atari-mint pml-m68k-atari-mint
+
+# ---- Automake toolchain ----
+FROM dependencies AS automake_tools
+RUN \
+  export DEBIAN_FRONTEND=noninteractive && \
+  apt -y install autoconf automake libtool pkg-config
 
 # ---- Build AGT tools ----
 # logronoide has prebuild binaries in his git. Just use them
-FROM dependencies AS agt
+FROM automake_tools AS agt
 WORKDIR /
 RUN \
   git clone https://bitbucket.org/logronoide/agtools.git && \
   chmod -R +x /agtools/bin/Linux
-
 
 COPY ./agt/config.sh /agtools/config.sh
 

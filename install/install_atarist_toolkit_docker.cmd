@@ -38,8 +38,8 @@ echo Installing the command stcmd in %TARGET%...
 > "%TARGET%" (
     echo @echo off
     echo setlocal
-    echo if "%%DOCKER_ACCOUNT%%"=="" set "DOCKER_ACCOUNT=logronoide"
-    echo if "%%STCMD_IMAGE_TAG%%"=="" set "STCMD_IMAGE_TAG=latest"
+    echo if "%%DOCKER_ACCOUNT%%"=="" set "DOCKER_ACCOUNT=%DOCKER_ACCOUNT%"
+    echo if "%%STCMD_IMAGE_TAG%%"=="" set "STCMD_IMAGE_TAG=%STCMD_IMAGE_TAG%"
     echo if "%%ST_WORKING_FOLDER%%"=="" ^(
     echo     set "ST_WORKING_FOLDER=%%cd%%"
     echo     if not "%%STCMD_QUIET%%"=="1" echo ST_WORKING_FOLDER is empty: using %%cd%% as absolute path to source code working folder.

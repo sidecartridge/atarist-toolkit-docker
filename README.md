@@ -25,6 +25,8 @@ Whether you're an experienced Atari ST developer or new to the platform, this im
 
 - [`Python`]() in case you want to write helper scripts to automate your development process.
 
+- [`autoconf`, `automake`, `libtool`, `pkg-config`]() for projects that use the GNU autotools build system.
+
 These tools are all included in the docker image and are ready to use out of the box, making it easy for you to get started writing code for the Atari ST. Hopefully, I will be expanding the range of tools and resources available to developers who use the image in the future. By adding more tools, a more comprehensive and complete development environment for developers who are interested in writing code for the Atari ST will come. 
 
 

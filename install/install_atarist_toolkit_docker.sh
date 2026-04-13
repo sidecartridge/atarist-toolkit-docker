@@ -31,10 +31,10 @@ echo "Installing the command stcmd in /usr/local/bin. Please enter your root pas
 cat << EOF > /usr/local/bin/stcmd
 #!/bin/bash
 if [ -z "\${DOCKER_ACCOUNT}" ]; then
-    DOCKER_ACCOUNT=logronoide
+    DOCKER_ACCOUNT="${DOCKER_ACCOUNT}"
 fi
 if [ -z "\${STCMD_IMAGE_TAG}" ]; then
-    STCMD_IMAGE_TAG="latest"
+    STCMD_IMAGE_TAG="${STCMD_IMAGE_TAG}"
 fi
 if [ -z "\${ST_WORKING_FOLDER}" ]; then
     ST_WORKING_FOLDER=\$(pwd)
