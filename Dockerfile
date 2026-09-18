@@ -76,11 +76,11 @@ RUN \
   apt -y install zip unzip
 
 # ---- Build AGT tools ----
-# logronoide has prebuild binaries in his git. Just use them
+# d_m_l's upstream repo ships prebuilt Linux binaries. Just use them
 FROM archive_tools AS agt
 WORKDIR /
 RUN \
-  git clone https://bitbucket.org/logronoide/agtools.git && \
+  git clone --depth 1 https://bitbucket.org/d_m_l/agtools.git && \
   chmod -R +x /agtools/bin/Linux
 
 COPY ./agt/config.sh /agtools/config.sh
