@@ -69,9 +69,15 @@ RUN \
   export DEBIAN_FRONTEND=noninteractive && \
   apt -y install autoconf automake libtool pkg-config
 
+# ---- Archive tools ----
+FROM automake_tools AS archive_tools
+RUN \
+  export DEBIAN_FRONTEND=noninteractive && \
+  apt -y install zip unzip
+
 # ---- Build AGT tools ----
 # logronoide has prebuild binaries in his git. Just use them
-FROM automake_tools AS agt
+FROM archive_tools AS agt
 WORKDIR /
 RUN \
   git clone https://bitbucket.org/logronoide/agtools.git && \

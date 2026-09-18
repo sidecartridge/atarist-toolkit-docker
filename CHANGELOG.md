@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+### Features
+- Added `zip` and `unzip` to the image so build artefacts can be packaged into archives, and third-party assets distributed as `.zip` files can be unpacked, without leaving the toolkit; see [Dockerfile](Dockerfile).
+
 ## v1.2.1 (2026-02-24) - bugfix release
 
 ### Fixes
