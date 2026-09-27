@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Features
+- Added `zip` and `unzip` to the image so build artefacts can be packaged into archives, and third-party assets distributed as `.zip` files can be unpacked, without leaving the toolkit; see [Dockerfile](Dockerfile).
+
+### Fixes
+- Restored the ability to build the image at all: the AGT tools were cloned from a fork that has since been deleted from Bitbucket, breaking every build. They now come from `d_m_l/agtools`, the original upstream already credited in the README, whose prebuilt Linux binaries are identical; see [Dockerfile](Dockerfile).
+
 ## v1.2.1 (2026-02-24) - bugfix release
 
 ### Fixes
