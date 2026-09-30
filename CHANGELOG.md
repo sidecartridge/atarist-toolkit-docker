@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v1.4.0 (2026-09-30) - release
 
 ### Features
 - Added `zip` and `unzip` to the image so build artefacts can be packaged into archives, and third-party assets distributed as `.zip` files can be unpacked, without leaving the toolkit; see [Dockerfile](Dockerfile).
@@ -10,6 +10,15 @@
 - git no longer warns `unable to access '/root/.config/git/...': Permission denied`: `HOME` is `/root`, which the host user `stcmd` runs as could not enter. It can now pass through it, without being able to read it; see [Dockerfile](Dockerfile).
 - Restored the ability to build the image at all: the AGT tools were cloned from a fork that has since been deleted from Bitbucket, breaking every build. They now come from `d_m_l/agtools`, the original upstream already credited in the README, whose prebuilt Linux binaries are identical; see [Dockerfile](Dockerfile).
 
+## v1.3.0 (2026-04-13) - release
+
+### Features
+- Added the GNU autotools (`autoconf`, `automake`, `libtool`, `pkg-config`) so projects that use the autotools build system can be configured and built inside the toolkit; see [Dockerfile](Dockerfile) and [README.md](README.md).
+- Added the `gemlib` and `pml` MiNT libraries to the image; see [Dockerfile](Dockerfile).
+
+### Fixes
+- The installed `stcmd` wrapper now keeps the `DOCKER_ACCOUNT` and image tag the installer was run with, instead of always falling back to `logronoide` and `latest`; see [install/install_atarist_toolkit_docker.sh](install/install_atarist_toolkit_docker.sh) and [install/install_atarist_toolkit_docker.cmd](install/install_atarist_toolkit_docker.cmd).
+
 ## v1.2.1 (2026-02-24) - bugfix release
 
 ### Fixes
@@ -17,7 +26,7 @@
 - README now references the `latest` release assets and documents the `STCMD_QUIET` / `STCMD_NO_TTY` runtime flags so automation is easier to configure.
 - The publish Make target pushes the `latest` Docker tag alongside versioned tags, ensuring Docker Hub always exposes a rolling build.
 
-## v1.2.0 (2026-02-10) - release
+## v1.2.0 (2026-02-23) - release
 
 ### Features
 - Added the `STCMD_NO_TTY` environment variable so `stcmd` can run from CI scripts and other non-interactive contexts without allocating a TTY.
@@ -39,7 +48,7 @@
 
 ---
 
-## v1.0.0 (2024-12-01) - release
+## v1.0.0 (2024-10-28) - release
 
 ### Features
 - First public release.
