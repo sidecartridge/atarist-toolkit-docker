@@ -103,6 +103,14 @@ COPY ./entrypoint.sh /
 ENV HOME=/root
 ENV AGTROOT=/agtools
 
+# stcmd mounts the project at /tmp with the host user's id, which git does not
+# see as the owner of the files: trust repositories there (at /tmp, or below
+# it when the working folder is a parent of the project), or each git command a
+# build runs (version strings, submodules...) fails with "detected dubious
+# ownership"
+RUN git config --system --add safe.directory /tmp && \
+  git config --system --add safe.directory '/tmp/*'
+
 # Define working directory.
 
 RUN ["chmod", "+x", "/entrypoint.sh"]
