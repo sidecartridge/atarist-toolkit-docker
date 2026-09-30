@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.4.0 (unreleased) - release
+## v1.4.0 (2026-09-30) - release
 
 ### Features
 - Added `zip` and `unzip` to the image so build artefacts can be packaged into archives, and third-party assets distributed as `.zip` files can be unpacked, without leaving the toolkit; see [Dockerfile](Dockerfile).
@@ -26,7 +26,7 @@
 - README now references the `latest` release assets and documents the `STCMD_QUIET` / `STCMD_NO_TTY` runtime flags so automation is easier to configure.
 - The publish Make target pushes the `latest` Docker tag alongside versioned tags, ensuring Docker Hub always exposes a rolling build.
 
-## v1.2.0 (2026-02-10) - release
+## v1.2.0 (2026-02-23) - release
 
 ### Features
 - Added the `STCMD_NO_TTY` environment variable so `stcmd` can run from CI scripts and other non-interactive contexts without allocating a TTY.
@@ -48,7 +48,7 @@
 
 ---
 
-## v1.0.0 (2024-12-01) - release
+## v1.0.0 (2024-10-28) - release
 
 ### Features
 - First public release.
