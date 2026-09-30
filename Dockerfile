@@ -111,6 +111,11 @@ ENV AGTROOT=/agtools
 RUN git config --system --add safe.directory /tmp && \
   git config --system --add safe.directory '/tmp/*'
 
+# HOME is /root, which the host user stcmd runs as cannot enter: let any user
+# through, so the per-user settings git looks for there are skipped as missing
+# instead of "Permission denied" warnings. Its contents stay unreadable.
+RUN chmod 711 /root
+
 # Define working directory.
 
 RUN ["chmod", "+x", "/entrypoint.sh"]
