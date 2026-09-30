@@ -6,6 +6,8 @@
 - Added `zip` and `unzip` to the image so build artefacts can be packaged into archives, and third-party assets distributed as `.zip` files can be unpacked, without leaving the toolkit; see [Dockerfile](Dockerfile).
 
 ### Fixes
+- git now works in the project folder: `stcmd` mounts it with the host user's id, which git inside the container did not see as the owner, so every git command a build ran (version strings, submodules...) failed with "detected dubious ownership". The image now trusts repositories at and below `/tmp` through `safe.directory`; see [Dockerfile](Dockerfile).
+- git no longer warns `unable to access '/root/.config/git/...': Permission denied`: `HOME` is `/root`, which the host user `stcmd` runs as could not enter. It can now pass through it, without being able to read it; see [Dockerfile](Dockerfile).
 - Restored the ability to build the image at all: the AGT tools were cloned from a fork that has since been deleted from Bitbucket, breaking every build. They now come from `d_m_l/agtools`, the original upstream already credited in the README, whose prebuilt Linux binaries are identical; see [Dockerfile](Dockerfile).
 
 ## v1.2.1 (2026-02-24) - bugfix release
