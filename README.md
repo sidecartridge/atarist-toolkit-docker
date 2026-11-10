@@ -21,6 +21,8 @@ Whether you're an experienced Atari ST developer or new to the platform, this im
 
 - [`m68k-atari-mint-gcc`]() is a cross compiler to generate C code usable in an Atari ST platform. It allows you to write C code on a modern machine and produce object files that can be run on the Atari ST. It is based on the GNU Compiler Collection (GCC) and has been specifically tailored for use with the Atari ST.
 
+- [`m68k-atari-mintelf-gcc`](http://vincent.riviere.free.fr/soft/m68k-atari-mintelf/) is a newer cross compiler, gcc 13.3 with binutils 2.42, installed beside `m68k-atari-mint-gcc` (gcc 4.6.4) without changing it. It builds ELF objects and links them into ordinary TOS programs that also carry ELF symbols, which Hatari's debugger can load. It supports link-time optimisation (`-flto`) and gcov, and comes with MiNTLib, fdlibm (`-lm`), gemlib, cflib, gemma, ldg, SDL, ncurses, zlib, readline and openssl built for it. Use it with `stcmd m68k-atari-mintelf-gcc`, or point a Makefile's tools at the `m68k-atari-mintelf-` prefix; `stcmd gcc` stays gcc 4.6.4. Note that C symbols have no leading underscore in its assembly, unlike `m68k-atari-mint`'s.
+
 - [`[A]tari [G]ame [T]ools`](https://bitbucket.org/d_m_l/agtools/src/master/) are a set of tools and code for rapid prototyping of Atari STE games. This version embeds the necessary libraries to compile an AGT project.
 
 - [`Python`]() in case you want to write helper scripts to automate your development process.
@@ -210,6 +212,12 @@ stcmd gcc hello.c -o hello.tos
 ```
 
 Now we have our first Atari ST executable in the working folder `/home/user/my-st-megademo`. To run it, we need to use an emulator or a real Atari ST machine. My testing platforms is [Hatari emulator](https://hatari.tuxfamily.org/), but there are more options. By default, gcc is a shortcut to the infamous `gcc-m68k-atari-mint`.
+
+To build the same program with gcc 13 instead, call its cross compiler by name:
+
+```
+stcmd m68k-atari-mintelf-gcc -O2 hello.c -o hello.tos
+```
 
 
 ### Set up a new M68K assembler project
