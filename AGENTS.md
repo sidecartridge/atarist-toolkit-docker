@@ -35,6 +35,8 @@ Quick notes for anyone hacking on this repo:
   them against the SHA-256 hashes written into the Dockerfile. For a new PPA version: run that
   repo's workflow with a new release tag, then update `MINTELF_ARM64` and the hashes. GitHub
   turns the `~` in a version into a `.` in asset names.
+  Decision (v1.5.0): that repo stays hosted by its author (neilrackett); sidecartridge does not
+  mirror it. If it disappears, arm64 builds fail at the `mintelf` stage.
 
 ## Key env vars in scripts
 - `DOCKER_ACCOUNT` (default `logronoide`) controls image destination.
