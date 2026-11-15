@@ -17,7 +17,7 @@ Quick notes for anyone hacking on this repo:
 - **`demo/`** (ASM, C, C_ASM, C_LIBCMINI) holds sample projects that are built with `stcmd make` inside the container. Use them to smoke-test an image.
 
 ## Build & CI
-- `Makefile` drives builds/publish. `test.yml` runs `make build` and `make test` on every PR. `publish.yml` runs on `v*` tags: it runs `make all` (clean, build, test, publish) for each arch in the matrix, then uploads the installers to both the `vX.Y.Z` and the `latest` GitHub releases. A failing test stops the publish.
+- `Makefile` drives builds/publish. `test.yml` runs `make build` and `make test` on every PR, for x86_64 and arm64 (native `ubuntu-24.04-arm` runner). `publish.yml` runs on `v*` tags: it runs `make all` (clean, build, test, publish) for each arch in the matrix, then uploads the installers to both the `vX.Y.Z` and the `latest` GitHub releases. A failing test stops the publish.
 - **Test harness:** `make test` (after `make build`, same `ARCH`) runs `tests/run.sh <image>`. It runs as the host user, like `stcmd`, and checks every tool, the libcmini and MiNT libraries, AGT, the README examples and all `demo/` builds (output must be a TOS executable). Any capability the image offers must keep a check there: when you add a tool, add its check; a change must never remove an existing one. Demo output is not byte-reproducible between runs (gcc embeds temp file names), so the harness checks the TOS header, not hashes.
 
 ## Two cross toolchains
