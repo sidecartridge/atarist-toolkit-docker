@@ -48,8 +48,10 @@ done
 
 echo "AGT"
 check "AGTROOT is /agtools" '[ "$AGTROOT" = /agtools ] && test -f /agtools/makedefs && test -d /agtools/agtsys'
+# Upstream AGT ships a different set per arch: lzsa only on x86_64, pcs only on aarch64.
 check "AGT binaries for this arch are executable" \
-  'd=/agtools/bin/Linux/$(uname -m); for b in agtcut lz77 lzsa packwrap pcs2agi rmac zx0; do test -x $d/$b || { echo "missing $d/$b"; exit 1; }; done'
+  'd=/agtools/bin/Linux/$(uname -m); case $(uname -m) in x86_64) extra=lzsa;; *) extra=pcs;; esac
+   for b in agtcut lz77 packwrap pcs2agi rmac zx0 $extra; do test -x $d/$b || { echo "missing $d/$b"; exit 1; }; done'
 check "rmac runs" '/agtools/bin/Linux/$(uname -m)/rmac -v'
 
 echo "README examples (through the entrypoint)"
