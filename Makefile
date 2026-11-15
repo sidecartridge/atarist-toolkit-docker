@@ -36,7 +36,7 @@ DOCKER_PASSWORD = ${DOCKERHUB_PASSWORD}
 
 ## Run ci part
 .PHONY: all
-all: clean build publish
+all: clean build test publish
 
 # Create the install files ready for release
 .PHONY: release
@@ -59,6 +59,11 @@ build:
 	@echo "Building docker image $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG_NAME)..."
 	docker build --platform=linux/${DOCKER_PLATFORM} -f Dockerfile -t $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG_NAME) .
 	docker tag $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG_NAME) $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):latest
+
+## Check every tool, library and demo in the built image
+.PHONY: test
+test:
+	tests/run.sh $(DOCKER_ACCOUNT)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG_NAME)
 
 ## Tag docker images
 .PHONY: tag-images

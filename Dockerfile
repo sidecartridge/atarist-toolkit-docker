@@ -17,10 +17,9 @@ RUN \
 # ---- Direct installation vasm ----
 WORKDIR /tmp
 FROM add_prebuild_packages AS vasm
-RUN \
-  curl http://sun.hasenbraten.de/vasm/release/vasm.tar.gz --output vasm.tar.gz && \
-  gunzip vasm.tar.gz && \
-  tar -xf vasm.tar && \
+# Source from the 2026-09-03 Wayback Machine snapshot of sun.hasenbraten.de (site gone)
+RUN --mount=type=bind,source=deps/vasm.tar.gz,target=/deps/vasm.tar.gz \
+  tar -xzf /deps/vasm.tar.gz && \
   cd vasm && \
   make CPU=m68k SYNTAX=mot && \
   cp vasmm68k_mot /usr/local/bin && \
@@ -32,10 +31,9 @@ RUN \
 # ---- Direct installation vlink ----
 WORKDIR /tmp
 FROM vasm AS vlink
-RUN \
-  curl http://sun.hasenbraten.de/vlink/release/vlink.tar.gz --output vlink.tar.gz && \
-  gunzip vlink.tar.gz && \
-  tar -xf vlink.tar && \
+# Source from the 2026-09-03 Wayback Machine snapshot of sun.hasenbraten.de (site gone)
+RUN --mount=type=bind,source=deps/vlink.tar.gz,target=/deps/vlink.tar.gz \
+  tar -xzf /deps/vlink.tar.gz && \
   cd vlink && \
   make && \
   cp vlink /usr/local/bin && \
@@ -61,7 +59,8 @@ RUN \
   apt -y install software-properties-common && \
   add-apt-repository ppa:vriviere/ppa && \
   apt -y update && \
-  apt -y install cross-mint-essential cflib-m68k-atari-mint gemma-m68k-atari-mint gemlib-m68k-atari-mint ldg-m68k-atari-mint sdl-m68k-atari-mint ncurses-m68k-atari-mint zlib-m68k-atari-mint readline-m68k-atari-mint openssl-m68k-atari-mint pml-m68k-atari-mint
+  apt -y install cross-mint-essential cflib-m68k-atari-mint gemma-m68k-atari-mint gemlib-m68k-atari-mint ldg-m68k-atari-mint sdl-m68k-atari-mint ncurses-m68k-atari-mint zlib-m68k-atari-mint readline-m68k-atari-mint openssl-m68k-atari-mint pml-m68k-atari-mint && \
+  rm -fR /var/cache/swcatalog /root/.launchpadlib
 
 # ---- Automake toolchain ----
 FROM dependencies AS automake_tools
@@ -79,23 +78,48 @@ RUN \
 # d_m_l's upstream repo ships prebuilt Linux binaries. Just use them
 FROM archive_tools AS agt
 WORKDIR /
+# Delete history and folders not needed at runtime and with dubious license
+# files in the same step, or they would still take space in the image
 RUN \
   git clone --depth 1 https://bitbucket.org/d_m_l/agtools.git && \
-  chmod -R +x /agtools/bin/Linux
+  chmod -R +x /agtools/bin/Linux && \
+  cd /agtools && \
+  rm -fR .git examples demos tutorials bin/Darwin bin/win tools
 
 COPY ./agt/config.sh /agtools/config.sh
 
-# Delete folders not needed at runtime and with dubious license files
-RUN rm -fR /agtools/examples
-RUN rm -fR /agtools/demos
-RUN rm -fR /agtools/tutorials
-RUN rm -fR /agtools/bin/Darwin
-RUN rm -fR /agtools/bin/win
-RUN rm -fR /agtools/tools
+# ---- m68k-atari-mintelf cross tools (gcc 13) ----
+# Beside m68k-atari-mint (gcc 4.6.4), not instead of it: every file has the
+# mintelf name, so the old toolchain and the gcc shortcut stay as they are.
+# ppa:vriviere/mintelf builds gcc, binutils and mintbin for amd64 only. On
+# arm64 they come from atarist-mintelf-arm64, which rebuilds them from the
+# PPA's own source packages, checked against these SHA-256 hashes.
+FROM agt AS mintelf
+ARG TARGETARCH
+ARG MINTELF_ARM64=https://github.com/neilrackett/atarist-mintelf-arm64/releases/download/noble-13.3.0-1
+RUN \
+  export DEBIAN_FRONTEND=noninteractive && \
+  add-apt-repository -y ppa:vriviere/mintelf && \
+  apt -y update && \
+  if [ "$TARGETARCH" = "arm64" ]; then \
+    mkdir /tmp/mintelf-debs && cd /tmp/mintelf-debs && \
+    printf '%s\n' \
+      "577b4424965978ee372d6d292d33cd957e0f888ecca20e2182ff529c934ee7f5  binutils-m68k-atari-mintelf_2.42-mintelf-20240218-1ppa20250527093812.noble_arm64.deb" \
+      "5071df9a811c2bfd8e5e8950a369204af7409f3a57da3daf13d6f7ab80c784c8  mintbin-m68k-atari-mintelf_0.3-Git-20250709-1ppa20251012230441.noble_arm64.deb" \
+      "47b7804785bb2cc3177b8eb737f698808f45d7e3b4e3bfd2f8fad4488af93a3b  gcc-m68k-atari-mintelf_13.3.0-mintelf-20240529-1ppa20240529195026.noble_arm64.deb" \
+      > SHA256SUMS && \
+    for f in $(cut -d' ' -f3 SHA256SUMS); do curl -fsSLO "$MINTELF_ARM64/$f"; done && \
+    sha256sum -c SHA256SUMS && \
+    apt -y install ./*.deb && \
+    cd / && rm -fR /tmp/mintelf-debs; \
+  fi && \
+  apt -y install cross-mintelf-essential cflib-m68k-atari-mintelf gemma-m68k-atari-mintelf gemlib-m68k-atari-mintelf ldg-m68k-atari-mintelf sdl-m68k-atari-mintelf ncurses-m68k-atari-mintelf zlib-m68k-atari-mintelf readline-m68k-atari-mintelf openssl-m68k-atari-mintelf fdlibm-m68k-atari-mintelf && \
+  rm -fR /var/cache/swcatalog /root/.launchpadlib && \
+  m68k-atari-mintelf-gcc --version
 
 # ---- Configure entrypoint ----
 WORKDIR /root
-FROM agt AS entrypoint
+FROM mintelf AS entrypoint
 
 COPY ./entrypoint.sh /
 
