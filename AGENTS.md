@@ -9,8 +9,16 @@ Quick notes for anyone hacking on this repo:
 - **Images:** Multi-arch builds (x86_64 + arm64) tagged by version, date, and `latest`.
 - **Installers:** `install/install_atarist_toolkit_docker.sh` (Unix) and `.cmd` (Windows) generate the `stcmd` helper on the host.
 
+## Architecture
+- **`Dockerfile`** is a linear multi-stage chain on `ubuntu:24.04`: `base_os → add_prebuild_packages → vasm → vlink → libcmini → dependencies → automake_tools → archive_tools → agt → entrypoint`. Add new tools as a new stage in that chain. `agt/config.sh` is copied into `/agtools` (`AGTROOT`).
+- **`entrypoint.sh`** `cd`s to `/tmp` (the mounted working folder) and runs the given command; `gcc` is aliased to `m68k-atari-mint-gcc`.
+- **Installers** write the `stcmd` wrapper on the host. In the `.sh` installer the wrapper is a heredoc: `${VAR}` is expanded at install time (e.g. `ARCH`), while `\${VAR}` is expanded when `stcmd` runs. The wrapper runs `docker run --rm -v $ST_WORKING_FOLDER:/tmp --user uid:gid <account>/atarist-toolkit-docker-<arch>:<tag> "$@"`. Keep the `.sh` and `.cmd` installers in sync.
+- **Image naming:** `<DOCKER_ACCOUNT>/atarist-toolkit-docker-<arch>`. The arch is `x86_64` or `arm64`, and the Makefile maps `i386`/`aarch64` to these names. Tags: `<version>`, `<version>-<date>`, and `latest`. The version comes from `version.txt`.
+- **`demo/`** (ASM, C, C_ASM, C_LIBCMINI) holds sample projects that are built with `stcmd make` inside the container. Use them to smoke-test an image.
+
 ## Build & CI
-- `Makefile` drives builds/publish; CI (publish.yml) tags/pushes to Docker Hub + GitHub releases.
+- `Makefile` drives builds/publish. `test.yml` runs `make build` and `make test` on every PR. `publish.yml` runs on `v*` tags: it runs `make all` (clean, build, test, publish) for each arch in the matrix, then uploads the installers to both the `vX.Y.Z` and the `latest` GitHub releases. A failing test stops the publish.
+- **Test harness:** `make test` (after `make build`, same `ARCH`) runs `tests/run.sh <image>`. It runs as the host user, like `stcmd`, and checks every tool, the libcmini and MiNT libraries, AGT, the README examples and all `demo/` builds (output must be a TOS executable). Any capability the image offers must keep a check there: when you add a tool, add its check; a change must never remove an existing one. Demo output is not byte-reproducible between runs (gcc embeds temp file names), so the harness checks the TOS header, not hashes.
 
 ## Key env vars in scripts
 - `DOCKER_ACCOUNT` (default `logronoide`) controls image destination.

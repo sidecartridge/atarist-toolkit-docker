@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.5.0 - unreleased
+
+### Fixes
+- Restored the ability to build the image: vasm and vlink's download site (`sun.hasenbraten.de`) is gone, so every build failed at the vasm step. Their sources, from the Wayback Machine's 3 September 2026 snapshot of that site, are now kept in [deps](deps) and mounted only while they are compiled, so they add nothing to the image; see [Dockerfile](Dockerfile).
+- The image is about 67 MB smaller, with every tool and library still in it: AGT's git history and the folders removed from it are now deleted in the step that clones it, and the caches left by adding vriviere's package repository are removed; see [Dockerfile](Dockerfile).
+
+### Development
+- Added a release test harness, `make test` ([tests/run.sh](tests/run.sh)). It checks every tool, library and AGT binary in the image, the README examples and all the demos, running as the host user like `stcmd`. Pull requests run it, and a release is not published unless it passes.
+
 ## v1.4.0 (2026-09-30) - release
 
 ### Features
