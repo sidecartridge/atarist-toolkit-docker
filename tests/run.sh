@@ -78,6 +78,19 @@ for d in ASM C C_ASM C_LIBCMINI; do
     && ok "demo/$d" || fail "demo/$d" "$out${bad:+ (not TOS:$bad)}"
 done
 
+echo "gcc 13 (m68k-atari-mintelf), beside gcc 4.6.4"
+check "stcmd gcc is still gcc 4.6.4" '/entrypoint.sh gcc --version | head -1 | grep -q " 4\.6\.4"'
+for t in gcc g++ as ld ar gcov lto-dump stripex; do
+  check "m68k-atari-mintelf-$t is installed" "command -v m68k-atari-mintelf-$t"
+done
+for l in c m gem gemma cflib ldg SDL ncurses z readline ssl crypto; do
+  check "mintelf lib$l.a is installed" "test -f /usr/m68k-atari-mintelf/lib/lib$l.a"
+done
+out=$(stcmd "$WORK/readme" m68k-atari-mintelf-gcc -O2 hello.c -o hello13.tos) && is_tos "$WORK/readme/hello13.tos" \
+  && ok "stcmd m68k-atari-mintelf-gcc -O2 hello.c (README)" || fail "stcmd m68k-atari-mintelf-gcc -O2 hello.c (README)" "$out"
+out=$(stcmd "$WORK/readme" m68k-atari-mintelf-gcc -O2 -flto libs.c -o libs13.prg -lgem -lz -lm) && is_tos "$WORK/readme/libs13.prg" \
+  && ok "mintelf links -lgem -lz -lm with -flto" || fail "mintelf links -lgem -lz -lm with -flto" "$out"
+
 echo "Host user inside the container"
 check "git works in a repository at /tmp" \
   'mkdir g && cd g && git init -q && git -c user.email=t@t -c user.name=t commit -q --allow-empty -m t && git rev-parse HEAD'

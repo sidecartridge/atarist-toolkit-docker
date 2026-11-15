@@ -2,6 +2,9 @@
 
 ## v1.5.0 - unreleased
 
+### Features
+- Added gcc 13.3 as a second cross toolchain, `m68k-atari-mintelf` (binutils 2.42, MiNTLib, fdlibm, gemlib, cflib, gemma, ldg, SDL, ncurses, zlib, readline and openssl), from Vincent Rivière's `ppa:vriviere/mintelf`. It brings LTO, gcov for profile-guided optimisation and programs with ELF debug symbols. It sits beside gcc 4.6.4 (`m68k-atari-mint`) without changing it: every file has the `mintelf` name, and `stcmd gcc` is still gcc 4.6.4. The PPA builds the compiler for amd64 only, so the arm64 image installs packages rebuilt from the PPA's own source packages by [atarist-mintelf-arm64](https://github.com/neilrackett/atarist-mintelf-arm64), checked against SHA-256 hashes in the Dockerfile; see [Dockerfile](Dockerfile).
+
 ### Fixes
 - Restored the ability to build the image: vasm and vlink's download site (`sun.hasenbraten.de`) is gone, so every build failed at the vasm step. Their sources, from the Wayback Machine's 3 September 2026 snapshot of that site, are now kept in [deps](deps) and mounted only while they are compiled, so they add nothing to the image; see [Dockerfile](Dockerfile).
 - The image is about 67 MB smaller, with every tool and library still in it: AGT's git history and the folders removed from it are now deleted in the step that clones it, and the caches left by adding vriviere's package repository are removed; see [Dockerfile](Dockerfile).
