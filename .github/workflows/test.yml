@@ -6,8 +6,18 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-24.04
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
     steps:
     - uses: actions/checkout@v2
     - name: Run - build
-      run: make build
+      run: make build ARCH=${{ matrix.arch }}
+    - name: Run - test
+      run: make test ARCH=${{ matrix.arch }}
